@@ -1,0 +1,29 @@
+
+gpt 0.3.0 (August 2016)
+===========
+
+* testthat routines for unit checks
+* Pedict MPT probability/mean/quantiles/density: predict.gpt.fit (S4 method)
+* Plot model fit: cdf, qplot
+* Subsetting to plot model fit separately per group
+
+
+gpt 0.2.0 (June 2016)
+===========
+
+* S4 classes for mpt, gpt, univariate distributions
+* S4 methods for densities and data generation (mpt, gpt, univariate distributions)
+* better starting values, separately for each continuous distribution
+* lower and upper bounds stored internally and adjusted for each eta parameter
+
+
+
+gpt 0.1.0 (June 2015)
+===========
+
+* first version of gpt
+* data generation: gen.gpt, gen.gpt.sample (allowing for heterogeneity)
+* model fitting: fit.gpt (single data sets + whole sample using parallel computing)
+* plotting model fit: plot.gpt (histgrams separately for response categories); qplot.gpt (x-axis: response probabilities per tree, y-axis: continuous quantiles)
+* model comparisons by AIC, BIC: gpt.select
+* latent continuous distributions: normal, lognormal, wald, gamma, exGauss, weibull

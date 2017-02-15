@@ -1,0 +1,10 @@
+
+# tree category  mpt_equation   latent_density
+learned_item;   hit  ; do          ;   mu,sig,lambda_do
+learned_item;   hit  ;(1-do)*g     ;   mu,sig,lambda_go
+learned_item;   miss ;(1-do)*(1-g) ;   mu,sig,lambda_gn
+
+new_item; fa ;  (1-dn)*g      ;      mu,sig,lambda_go
+new_item; cr ;  (1-dn)*(1-g)  ;      mu,sig,lambda_gn
+new_item; cr ;  dn            ;      mu,sig,lambda_dn
+

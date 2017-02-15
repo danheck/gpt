@@ -1,0 +1,19 @@
+
+# tree         ;  category ; mpt_equation  ;   latent_density
+learned_item_30;   hit_30  ; do            ;   mu,sig,lambda_do
+learned_item_30;   hit_30  ;(1-do)*g30     ;   mu,sig,lambda_g_inc
+learned_item_30;   miss_30 ;(1-do)*(1-g30) ;   mu,sig,lambda_g_con
+
+new_item_30; fa_30 ;  (1-dn)*g30      ;      mu,sig,lambda_g_inc
+new_item_30; cr_30 ;  (1-dn)*(1-g30)  ;      mu,sig,lambda_g_con
+new_item_30; cr_30 ;  dn              ;      mu,sig,lambda_dn
+
+
+# tree         ;  category ; mpt_equation  ;   latent_density
+learned_item_70;   hit_70  ; do            ;   mu,sig,lambda_do
+learned_item_70;   hit_70  ;(1-do)*g70     ;   mu,sig,lambda_g_con
+learned_item_70;   miss_70 ;(1-do)*(1-g70) ;   mu,sig,lambda_g_inc
+
+new_item_70; fa_70 ;  (1-dn)*g70      ;      mu,sig,lambda_g_con
+new_item_70; cr_70 ;  (1-dn)*(1-g70)  ;      mu,sig,lambda_g_inc
+new_item_70; cr_70 ;  dn              ;      mu,sig,lambda_dn

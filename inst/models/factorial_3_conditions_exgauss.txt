@@ -1,0 +1,9 @@
+
+######## GPT version of simple RT comparison #####
+##
+## Tree      ; Cat.  ; MPT equation ; exGaussian
+##
+condition_A  ; A     ;  1           ;  m_A,sd,l_A
+condition_B  ; B     ;  1           ;  m_B,sd,l_B
+condition_C  ; C     ;  1           ;  m_C,sd,l_C
+

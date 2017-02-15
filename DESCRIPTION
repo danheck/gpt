@@ -1,0 +1,23 @@
+Package: gpt
+Type: Package
+Title: Generalized Processing Tree Models
+Version: 0.3.0
+Date: 2016-08-24
+Author: Daniel W. Heck
+Authors@R: person("Daniel", "Heck", email = "heck@uni-mannheim.de",
+  role = c("aut", "cre"))
+Maintainer: Daniel W. Heck <heck@uni-mannheim.de>
+Imports:
+    parallel,
+    numDeriv,
+    methods,
+    matrixStats
+Suggests: 
+    testthat
+Description: Fits generalized processing tree (GPT) models for multivariate data (a single discrete variable and one or more
+    continuous response variables per trial). Extends multinomial processing tree (MPT) models by assuming that distribution 
+    of continuous variables is a (mutlivariate) mixture distribution with the MPT core structure defining the mixture
+    probabilities.
+License: GPL-2
+LazyData: true
+RoxygenNote: 5.0.1

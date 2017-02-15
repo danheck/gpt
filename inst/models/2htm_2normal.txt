@@ -1,0 +1,10 @@
+
+#  tree      ; cat  ; mpt          ; normal 1 ; normal 2
+learned_item ; hit  ; do           ; m1_d,s1  ; m2_d,s2
+learned_item ; hit  ; (1-do)*g     ; m1_g,s1  ; m2_g,s2
+learned_item ; miss ; (1-do)*(1-g) ; m1_g,s1  ; m2_g,s2
+  
+new_item     ; fa   ; (1-dn)*g     ; m1_g,s1  ; m2_g,s2
+new_item     ; cr   ; (1-dn)*(1-g) ; m1_g,s1  ; m2_g,s2
+new_item     ; cr   ; dn           ; m1_d,s1  ; m2_d,s2
+
