@@ -53,4 +53,3 @@ by(gen$data$y, gen$data$state, mean)
 \seealso{
 gen.gpt
 }
-

@@ -18,4 +18,3 @@
 \description{
 Either estimated parameters (single data set) or summary of estimates (if model was fitted for a sample of participants using \code{group})
 }
-

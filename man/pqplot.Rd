@@ -23,4 +23,3 @@ pqplot(model, cumsum = FALSE, quantiles = seq(0.1, 0.9, 0.2), ncol = 4,
 \description{
 Plot predicted vs. observed quantiles of continuous variable against predicted and observed (cumulative) category probabilities
 }
-

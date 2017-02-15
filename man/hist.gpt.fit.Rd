@@ -16,4 +16,3 @@
 \description{
 Plot predicted against observed continuous distributions
 }
-

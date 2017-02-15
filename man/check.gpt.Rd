@@ -43,4 +43,3 @@ check.gpt(file=file, latent=c("normal", "normal"),
 # list of example model files:
 list.files(path = paste0(path.package("gpt"),"/models"))
 }
-

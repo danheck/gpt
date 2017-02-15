@@ -18,11 +18,11 @@
 
 \item{dim}{only for multivariate continuous data: dimension for prediction}
 
+\item{quantiles}{which quantiles to predict}
+
 \item{prec}{number of evaluations of the GPT density to compute conditional means/quantiles for the latent distributions}
 
 \item{...}{ignored}
-
-\item{quantile}{which quantiles to predict}
 }
 \description{
 Computes expected category/branch probabilities and the corresponding conditional means and quantiles/densities for the continuous latent distributions.
@@ -53,4 +53,3 @@ lines(yy, p[3,-(1:4)], col=2)
 legend("topright", col=1:2, lty=1, c("Detect","Guess"))
 }
 }
-

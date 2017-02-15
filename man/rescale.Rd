@@ -16,4 +16,3 @@ rescale(y, min = 0, max = 1)
 \description{
 Uses a linear transformation to rescale variable to a specific range (e.g., [0,1] to adhere to a beta distribution). The new minimum/maximum will be equal to the lower/upper bound.
 }
-

@@ -10,6 +10,9 @@
 #' 
 #' @author Daniel W. Heck, \email{heck@@uni-mannheim.de}
 # @import statmod, gamlss.dist, numDeriv
+#' @import stats
+#' @importFrom graphics legend
+#' 
 #' @docType package
 #' @name gpt
 NULL

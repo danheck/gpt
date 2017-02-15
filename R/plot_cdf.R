@@ -3,6 +3,7 @@
 #' 
 #' Plot predicted against observed cumulative densities (separately per observed category)
 #' @inheritParams predict.gpt.fit
+#' @param model fitted GPT model (\link{fit.gpt})
 #' @param ks.test whether to perform Kolmogorov-Smirnov Tests (\link{ks.test})
 #' @inheritParams qplot
 #' @param ... further arguments passt to \code{\link{plot}}

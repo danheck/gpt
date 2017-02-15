@@ -1,8 +1,8 @@
 Package: gpt
 Type: Package
 Title: Generalized Processing Tree Models
-Version: 0.3.0
-Date: 2016-08-24
+Version: 0.4.0
+Date: 2017-02-15
 Author: Daniel W. Heck
 Authors@R: person("Daniel", "Heck", email = "heck@uni-mannheim.de",
   role = c("aut", "cre"))
@@ -20,4 +20,4 @@ Description: Fits generalized processing tree (GPT) models for multivariate data
     probabilities.
 License: GPL-2
 LazyData: true
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

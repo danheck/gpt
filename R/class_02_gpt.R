@@ -41,6 +41,7 @@ setMethod(
     .Object@distr <- gpt.res$distr
     .Object@eta <- gpt.res$eta.names
     .Object@const <- gpt.res$const
+    .Object@map.vec <- as.integer(gpt.res$map.vec)
     
     return(.Object)
   }

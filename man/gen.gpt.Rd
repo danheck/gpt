@@ -34,12 +34,11 @@ file <- paste0(path.package("gpt"), "/models/2htm_2normal.txt")
 
 gen <- gen.gpt(n=n, theta=theta, eta=eta, file=file,
               latent=c("normal", "normal"), restrictions=list("do=dn"))
-head(gen$data) 
+head(gen) 
 # check means of latent continuous distributions:
-tapply(gen$data$y.1, gen$data$state, mean)
+tapply(gen$y.1, gen$state, mean)
 
 }
 \seealso{
 gen.gpt.sample
 }
-

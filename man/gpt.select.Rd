@@ -12,4 +12,3 @@ gpt.select(model.list)
 \description{
 Currently, only functional for models fitted to single datasets
 }
-

@@ -8,7 +8,7 @@
 #' @param dens if \code{TRUE}, returns conditional densities (instead of quantiles) for each category/branch
 #' @param group select group by an index, e.g., \code{group=1} (if mutliple groups were fitted)
 #' @param dim only for multivariate continuous data: dimension for prediction
-#' @param quantile which quantiles to predict
+#' @param quantiles which quantiles to predict
 #' @param prec number of evaluations of the GPT density to compute conditional means/quantiles for the latent distributions
 #' @param ... ignored
 #' @examples 

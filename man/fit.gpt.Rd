@@ -74,4 +74,3 @@ fit <- fit.gpt(x=gen$x, y=gen$y, latent="exgauss", file=file,
 fit
 }
 }
-

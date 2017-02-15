@@ -31,9 +31,12 @@ print.gpt.fit <- function(x, ci=.95, digits=3,...){
 }
 
 
+# print.gpt <- function(x, ...){
+#   print(x)
+# }
 
-# @export
 # @importFrom base print
+#  @export
 setMethod(
   f="print",
   signature = "gpt",

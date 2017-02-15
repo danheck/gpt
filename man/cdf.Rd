@@ -4,10 +4,12 @@
 \alias{cdf}
 \title{Plot Predicted and Empirical Cumulative Densities}
 \usage{
-cdf(model, ks = TRUE, dim = 1, group, ...)
+cdf(model, ks.test = TRUE, dim = 1, group = 1, ...)
 }
 \arguments{
-\item{ks}{whether to perform Kolmogorov-Smirnov Tests (\link{ks.test})}
+\item{model}{fitted GPT model (\link{fit.gpt})}
+
+\item{ks.test}{whether to perform Kolmogorov-Smirnov Tests (\link{ks.test})}
 
 \item{dim}{only for multivariate continuous data: dimension for prediction}
 
@@ -18,4 +20,3 @@ cdf(model, ks = TRUE, dim = 1, group, ...)
 \description{
 Plot predicted against observed cumulative densities (separately per observed category)
 }
-

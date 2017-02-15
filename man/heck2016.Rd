@@ -28,4 +28,3 @@ cdf(fit)
 }
 }
 \keyword{datasets}
-

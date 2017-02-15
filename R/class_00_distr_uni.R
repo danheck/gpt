@@ -101,3 +101,18 @@ make.distr <- function(label, eta.idx, y=NULL){
       range=range, lower=lower, upper=upper)
 }
 
+
+setMethod(
+  f="identical",
+  signature="distr.uni",
+  definition = function(x, y){
+    ident <- 
+      x@label == y@label &&
+      x@dens == y@dens &&
+      x@eta.idx == y@eta.idx &&
+      x@range == y@range &&
+      x@lower == y@lower &&
+      x@upper == y@upper
+    return(ident)
+  }
+)

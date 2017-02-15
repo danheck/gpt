@@ -68,9 +68,25 @@ restrict.mix <- function(gpt, restrictions){
     }
   }
   
+  # eliminate identical base distributions (for speed)
+  map.vec <- gpt$map.vec
+  cnt <- 1
+  while (max(map.vec) > cnt){
+    for (cc in length(distr):(cnt+1)){
+      ident <- mapply(identical, distr[[cnt]], distr[[cc]])
+      if (all(ident)){
+        distr[[cc]] <- NULL
+        map.vec <- replace(map.vec, map.vec == cc, cnt)
+        map.vec[map.vec > cc] <- map.vec[map.vec > cc] - 1
+      }
+    }
+    cnt <- cnt + 1
+  }
+ names(distr) <- paste0("base", seq_along(distr)) 
   
   res <- list(distr=distr, 
               eta.names=reduced.names, 
-              const=const)
+              const=const,
+              map.vec = map.vec)
   return(res)
 }
