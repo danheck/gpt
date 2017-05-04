@@ -33,6 +33,6 @@
 #' @export
 check.gpt <- function(file, latent, restrictions=NULL){
   gpt <- new("gpt", file, latent, restrictions)
-  print(gpt)
+  gpt
 }
 

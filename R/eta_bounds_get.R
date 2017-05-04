@@ -5,7 +5,11 @@ get.eta.lower <- function(gpt){
   lower <- rep(-Inf, length(gpt@eta))
   for(base in gpt@distr){
     for(cc in base){
-      lower[cc@eta.idx] <- pmax(lower[cc@eta.idx], cc@lower)
+      eta.free <- cc@eta.idx > 0
+      if (any(eta.free)){
+        eta.idx <- cc@eta.idx[eta.free]
+        lower[eta.idx] <- pmax(lower[eta.idx], cc@lower[eta.free])
+      }
     }
   }
   # extract bounds:
@@ -30,7 +34,12 @@ get.eta.upper <- function(gpt){
   upper <- rep(Inf, length(gpt@eta))
   for(base in gpt@distr){
     for(cc in base){
-      upper[cc@eta.idx] <- pmax(upper[cc@eta.idx], cc@upper)
+      eta.free <- cc@eta.idx > 0
+      if (any(eta.free)){
+        eta.idx <- cc@eta.idx[eta.free]
+        upper[eta.idx] <- pmax(upper[eta.idx], cc@upper[eta.free])
+      }
+      # upper[cc@eta.idx] <- pmax(upper[cc@eta.idx], cc@upper)
     }
   }
   # extract bounds:

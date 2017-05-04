@@ -5,10 +5,14 @@
 #' @importFrom utils read.delim
 read.file.to.tab <- function(file){
   
-  tab <- read.delim(file, sep=";", 
-                    header = FALSE, strip.white = TRUE, 
-                    stringsAsFactors = FALSE, blank.lines.skip = TRUE, 
-                    comment.char="#")
+  if (grepl("\n", file)){
+    file <- textConnection(file)
+  } else {
+    tab <- read.delim(file, sep=";", 
+                      header = FALSE, strip.white = TRUE, 
+                      stringsAsFactors = FALSE, blank.lines.skip = TRUE, 
+                      comment.char="#")
+  }
   
   # number of continuous variables:
   n.cont <- ncol(tab) - 3
