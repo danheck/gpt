@@ -98,8 +98,6 @@ setMethod("dens", signature(distr = "gpt",
                                                                     log=TRUE)
                                   lik.base
                                 })
-            # library(microbenchmark)
-            # microbenchmark(,, times = 100)
             
             lik.base <- matrix(lik.base, N)
             lik.branch <- lik.base[,distr@map.vec,drop=FALSE] + log(lik.branch)

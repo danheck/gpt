@@ -17,6 +17,8 @@ check.input.par <- function(par, names){
            "\n    Model names = ", paste(names, collapse=","))
     par <- par[ reorder]
     names(par) <- names
+  }else if(!is.null(names) & length(par) != length(names)){
+    stop("Length of parameters and labels does not match.")
   }else if(!is.null(names) & length(par) == length(names)){
     names(par) <- names
   }

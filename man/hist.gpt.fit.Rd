@@ -4,7 +4,7 @@
 \alias{hist.gpt.fit}
 \title{Plot Predicted and Observed Densities}
 \usage{
-\method{hist}{gpt.fit}(x, dim = 1, freq = "tree", group = 1, ...)
+\method{hist}{gpt.fit}(x, dim = 1, freq = "tree", ...)
 }
 \arguments{
 \item{x}{fitted model return from \code{\link{fit.gpt}}}
@@ -13,12 +13,8 @@
 
 \item{freq}{how to normalize histogram and density. Either per category (\code{freq = "cat"}), per tree (\code{freq = "tree"}), or in absolute frequencies (\code{freq = "freq"})}
 
-\item{group}{select group by an index, e.g., \code{group=1} (if mutliple groups were fitted)}
-
 \item{...}{further arguments passt to \code{\link{hist}}}
-
-\item{which}{group to plot (not tested!)}
 }
 \description{
-Plot predicted against observed continuous distributions
+Plot predicted against observed continuous distributions (only for group = 1)
 }

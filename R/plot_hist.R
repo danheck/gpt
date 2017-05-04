@@ -1,9 +1,10 @@
 #' Plot Predicted and Observed Densities
 #' 
-#' Plot predicted against observed continuous distributions
+#' Plot predicted against observed continuous distributions (only for group = 1)
+#' 
 #' @param x fitted model return from \code{\link{fit.gpt}}
 #' @param freq how to normalize histogram and density. Either per category (\code{freq = "cat"}), per tree (\code{freq = "tree"}), or in absolute frequencies (\code{freq = "freq"})
-#' @param which group to plot (not tested!)
+# ' @param group group to plot (not tested!)
 #' @inheritParams predict.gpt.fit
 #' @param ... further arguments passt to \code{\link{hist}}
 #' @importFrom graphics hist lines par plot points text
@@ -11,7 +12,7 @@
 hist.gpt.fit <- function(x, 
                          dim=1, 
                          freq = "tree", 
-                         group = 1,
+                         # group = 1,
                          ...){
   mfrow <- par()$mfrow
   mar <- par()$mar
@@ -33,7 +34,7 @@ hist.gpt.fit <- function(x,
   # N.per.tree <- x$gpt
   miny <- min(data$y)-1
   maxy <- max(data$y)+1
-  pred <- predict(x, dens = TRUE, group=group)
+  pred <- predict(x, dens = TRUE, group=1)
   
   yy <- as.numeric(colnames(pred[,-(1:4)]))
   scale <- diff(yy[1:2])

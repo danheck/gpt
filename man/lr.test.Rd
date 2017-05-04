@@ -9,7 +9,7 @@ lr.test(model, nested, EM = TRUE)
 \arguments{
 \item{model}{the more general model (see \code{\link{fit.gpt}})}
 
-\item{nested}{the nested model (i.e., a model that differs only in additional order constraints). Note that the nestedness of models is \italic{not} checked internally}
+\item{nested}{the nested model (i.e., a model that differs only in additional order constraints). Note that the nestedness of models is not checked internally.}
 
 \item{EM}{whether to use the expectation-maximization fit or that of the gradient-based optimization}
 }

@@ -12,6 +12,7 @@
 # @import statmod, gamlss.dist, numDeriv
 #' @import stats
 #' @importFrom graphics legend
+#' @importFrom grDevices adjustcolor
 #' 
 #' @docType package
 #' @name gpt

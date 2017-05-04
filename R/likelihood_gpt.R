@@ -36,8 +36,8 @@ f.complete <- function(eta, gpt, y, Z){
 # (wrapper for hessian and optim)
 gpt.ll <- function(par, gpt, yy, xx){
   P1 <- length(gpt@theta)
-  dens(distr=gpt, x=xx, y=yy, 
-       theta=par[1:P1], eta=par[(P1+1):length(par)], 
+  dens(distr=gpt, x=xx, y=yy,
+       theta=par[1:P1], eta=par[(P1+1):length(par)],
        log=TRUE)
 }
 
