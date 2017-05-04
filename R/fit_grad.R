@@ -33,14 +33,16 @@ fit.grad <- function(gpt, x, y,
       start <- c(runif(P1, .2, .8),
                  random.start(eta.lower, eta.upper, starting.values[P1+1:P2]))
     }
+    # scaling of eta parameters:
+    eta.scale <- abs(starting.values[(P1+1:P2)[P2>0] ])
+    eta.scale[eta.scale < .001] <- .001
     try({
       res <- optim(start, gpt.ll, method="L-BFGS-B", 
                        # hessian = FALSE,
                        lower=c(rep(1e-4,  P1), eta.lower), 
                        upper=c(rep(1-1e-4,P1), eta.upper),        
                        control=list(fnscale=-1, maxit=maxit, 
-                                    parscale=c(rep(1,P1),  
-                                               starting.values[(P1+1:P2)[P2>0] ])), 
+                                    parscale=c(rep(1,P1), eta.scale)), 
                        yy=y, xx=x, gpt=gpt)
       
       par.mat[optim.cnt,] <- res$par

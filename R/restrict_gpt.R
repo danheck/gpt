@@ -26,7 +26,7 @@ restrict.mix <- function(gpt, restrictions){
     
     for(i in 1:length(restrictions)){
       
-      
+      restrictions[[i]] <- gsub(" ", "", restrictions[[i]], fixed = TRUE)
       vec <- unlist(strsplit(restrictions[[i]], "="))
       vec.num <- suppressWarnings(as.numeric(vec))
       

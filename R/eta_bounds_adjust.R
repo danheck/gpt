@@ -19,7 +19,8 @@ adjust.bounds <- function(gpt, y,
   eta.lower <- check.input.par(par = eta.lower, names = gpt@eta)
   eta.upper <- check.input.par(par = eta.upper, names = gpt@eta)
   
-  if(!is.null(eta.lower) && !is.null(eta.upper) && any(eta.upper <= eta.lower))
+  orderOK <- all(eta.upper <= eta.lower, na.rm = TRUE)
+  if(!is.null(eta.lower) && !is.null(eta.upper) && !orderOK)
     stop("some values of eta.lower are larger or equal to those of eta.upper!")
   
   
@@ -31,20 +32,20 @@ adjust.bounds <- function(gpt, y,
       
       # boundaries due to univariate distribution parameters:
       gpt@distr[[ss]][[cc]] <-  make.distr(label = tmp@label, 
-                                              eta.idx = tmp@eta.idx,
-                                              y = y[,cc])
+                                           eta.idx = tmp@eta.idx,
+                                           y = y[,cc])
       
       # check whether user-specified bounds are more strict than necessary default boundaries:
       if(!is.null(eta.lower) && length(eta.lower) > 0){
         gpt@distr[[ss]][[cc]]@lower <- 
           pmax(eta.lower[tmp@eta.idx], 
-               gpt@distr[[ss]][[cc]]@lower)
+               gpt@distr[[ss]][[cc]]@lower, na.rm = TRUE)
       }
       
       if(!is.null(eta.upper)&& length(eta.upper) > 0){
         gpt@distr[[ss]][[cc]]@upper <- 
           pmin(eta.upper[tmp@eta.idx], 
-               gpt@distr[[ss]][[cc]]@upper)
+               gpt@distr[[ss]][[cc]]@upper, na.rm = TRUE)
       }
     }
   }

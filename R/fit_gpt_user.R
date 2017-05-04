@@ -11,7 +11,7 @@
 #' @param  restrictions list with parameter restrictions (e.g., \code{list("g=0.5", "mean1=mean2=100")})
 #' @param baseline whether to fit baseline models that assume a saturated MPT structure and (a) separate continuous distributions per category (\code{y.per.cat} = no mixture) or (b) a single distribution across all categories (\code{y.null}). In each case, separate distributions are assumed for each continuous variable.
 #' @param starting.values starting values for theta and eta (used only in first EM run). Note that sensible starting values are guessed by default.
-#' @param eta.lower lower bound vector or scalar for eta parameters
+#' @param eta.lower lower bound vector or scalar for eta parameters (assigned by name; or in alphabetical order). It is sufficient to constrain a subset of eta parameters selectively using a named vector.
 #' @param eta.upper upper bound vector or scalar for eta parameters
 #' @param EM.tol tolerance for EM algorithm
 #' @param n.fit number of EM and optim fitting runs (if any \code{n.fit>1}: with random starting values)

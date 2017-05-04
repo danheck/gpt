@@ -10,5 +10,8 @@ gpt.select(model.list)
 \item{model.list}{list of fitted gpt-models (see \code{\link{fit.gpt}})}
 }
 \description{
-Currently, only functional for models fitted to single datasets
+Currently, works only for models fitted to a single dataset
+}
+\seealso{
+\code{\link{lr.test}}
 }

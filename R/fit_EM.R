@@ -15,7 +15,7 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
                                      names = c(gpt@theta, gpt@eta))
   
 
-  loglik <- rep(NA, n.fit)  
+  loglik <- iters <- rep(NA, n.fit)  
   par.mat <- matrix(NA, n.fit, P1 + P2)
   
   if(print) 
@@ -128,6 +128,7 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
     # store iteration
     par.mat[EM.cnt,] <- par2
     loglik[EM.cnt] <-  gpt.ll(par=par2, gpt=gpt, xx=x, yy=y)
+    iters[EM.cnt] <-  cnt.iter
   }
   
   ######## select best EM iteration as result:
@@ -145,7 +146,9 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
   par.best <- par.mat[ll.idx,]
   names(par.best) <-  c(gpt@theta, gpt@eta)
 
-  res <- list(par = par.best, loglik = ll)
+  res <- list("par" = par.best, 
+              "loglik" = ll, 
+              "iter" = iters[ll.idx])
   res
 }
 

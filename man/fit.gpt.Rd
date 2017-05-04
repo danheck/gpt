@@ -28,7 +28,7 @@ fit.gpt(x, y, data, file, latent, group = NULL, restrictions = NULL,
 
 \item{starting.values}{starting values for theta and eta (used only in first EM run). Note that sensible starting values are guessed by default.}
 
-\item{eta.lower}{lower bound vector or scalar for eta parameters}
+\item{eta.lower}{lower bound vector or scalar for eta parameters (assigned by name; or in alphabetical order). It is sufficient to constrain a subset of eta parameters selectively using a named vector.}
 
 \item{eta.upper}{upper bound vector or scalar for eta parameters}
 

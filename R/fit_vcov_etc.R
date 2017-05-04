@@ -1,11 +1,13 @@
 
 add.vcov <- function(gpt, par, x, y, print = FALSE){
   
-  if(print) cat("Estimating standard errors by Fisher information...")
+  if (print) 
+    cat("Estimating standard errors by Fisher information...")
+  
   names(par) <- c(gpt@theta, gpt@eta)
   vcov <- hess <- SE <- NA
   ll <- gpt.ll(par=par, gpt=gpt, yy=y, xx=x)
-  try({
+  try ({
     hess <- hessian(gpt.ll, par, method="Richardson",
                     gpt=gpt, yy=y, xx=x)
     vcov <- -solve(hess)

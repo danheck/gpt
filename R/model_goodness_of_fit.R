@@ -1,28 +1,26 @@
-#' Plot Predicted and Observed Densities
+
+
+
+#' Goodness of Fit of GPT Models
 #' 
-#' Plot predicted against observed continuous distributions
-#' @param x fitted model return from \code{\link{fit.gpt}}
-#' @param freq how to normalize histogram and density. Either per category (\code{freq = "cat"}), per tree (\code{freq = "tree"}), or in absolute frequencies (\code{freq = "freq"})
-#' @param which group to plot (not tested!)
-#' @inheritParams predict.gpt.fit
-#' @param ... further arguments passt to \code{\link{hist}}
-#' @importFrom graphics hist lines par plot points text
+#' Uses a fixed numbers of histogram bins to compare model predictions against the empirical distribution.
+#' 
+#' @param model a fitted gpt model (see \code{\link{fit.gpt}})
+#' @seealso \code{\link{lr.test}}
 #' @export
-hist.gpt.fit <- function(x, 
-                         dim=1, 
-                         freq = "tree", 
-                         group = 1,
-                         ...){
-  mfrow <- par()$mfrow
-  mar <- par()$mar
+model_fit_discrete <- function (model, 
+                                bins = 10,
+                                extend = .1, 
+                                breaks){
+
   
-  if (!is.null(x$group)){
+  if (!is.null(model$group)){
     stop ("group not implemented")
   } else {
-    data <- x$data
+    data <- model$data
   }
   
-  cat.names <- x$gpt@mpt@cat.names
+  cat.names <- model$gpt@mpt@cat.names
   J <- length(cat.names)
   
   tmp <- ceiling(sqrt(J))
@@ -31,8 +29,8 @@ hist.gpt.fit <- function(x,
                             levels = seq_along(x$gpt@mpt@cat.names),
                             labels = x$gpt@mpt@cat.names))
   # N.per.tree <- x$gpt
-  miny <- min(data$y)-1
-  maxy <- max(data$y)+1
+  miny <- min(data$y) - extend
+  maxy <- max(data$y) + extend
   pred <- predict(x, dens = TRUE, group=group)
   
   yy <- as.numeric(colnames(pred[,-(1:4)]))
@@ -72,16 +70,8 @@ hist.gpt.fit <- function(x,
              yylab <- "Absolute Frequency"
            },
            stop("Type of 'freq' not supported."))
-    plot.args$x = hh
-    plot.args$ylab <- yylab
-    plot.args$main <- cat.names[cc] 
-    plot.args$ylim <- range(0, dd, hh$counts)
-    do.call(plot, args = plot.args)
-    # plot(hh,  col="gray", border = "gray", main=cat.names[cc], xlab=xlab, 
-    #      ylim=range(0, dd, hh$counts),
-    #      ylab = yylab, las = 1, ...)
-    lines(yy, dd, col="black", lwd = 2)
   }
   
-  par(mfrow=mfrow, mar=mar)
+  
+  return(tab)
 }

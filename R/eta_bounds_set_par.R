@@ -6,8 +6,11 @@ eta.bound.par <- function(par, lower, upper,
     warning("scale must be in the open interval (0.5,1)")
     scale <- .95
   }
-  if(any(lower >= upper))
-    stop("lower bounds are not smaller than upper bounds")
+  if(any(lower >= upper)){
+    whichpar <- paste0(names(lower)[lower >= upper], collapse = ", ")
+    stop("lower bounds are not smaller than upper bounds: ",
+         whichpar)
+  }
   
   l.inf <- lower == -Inf
   u.inf <- upper == Inf

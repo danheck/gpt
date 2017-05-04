@@ -43,7 +43,8 @@ predict.gpt.fit <- function(object,
                             group,
                             dim = 1, 
                             quantiles = c(.1,.3,.5,.7,.9), 
-                            prec=500,...){
+                            prec=500,
+                            ...){
   
   object <- subset.gpt.fit(object, group)
   yy <- matrix(colMeans(object$data$y), 
