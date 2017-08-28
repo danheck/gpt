@@ -83,23 +83,54 @@ setMethod("dens", signature(distr = "gpt",
             #                     eta = eta, const = distr@const, log=FALSE)
             #   lik.branch[sel.rows, sel.branch] <- lik.branch[sel.rows, sel.branch] * d.cont
             # }
-
-            lik.base <-  sapply(seq_along(distr@distr),
-                                # basis distribution densities:
-                                function(s) {
-                                  lik.base <- rep(-Inf, N)
-                                  sel.rows <- rowSums(lik.branch[,distr@map.vec == s,drop=FALSE]) != 0
-                                  sel.rows[is.na(sel.rows)] <- TRUE
-                                  if(any(sel.rows))
-                                    lik.base[sel.rows]  <-  d.multi(y = y[sel.rows,,drop=FALSE],
-                                                                    distr=distr@distr[[s]],
-                                                                    eta = eta,
-                                                                    const = distr@const, 
-                                                                    log=TRUE)
-                                  lik.base
-                                })
+            # browser()
+            # only for relevant rows (improved)
+            if (ncol(y) > 1){
+            lik.base <-  matrix(sapply(seq_along(distr@distr),
+                                       # basis distribution densities:
+                                       function(s) {
+                                         lik.base <- rep(-Inf, N)
+                                         sel.rows <- rowSums(lik.branch[,distr@map.vec == s,drop=FALSE]) != 0
+                                         sel.rows[is.na(sel.rows)] <- TRUE
+                                         if(any(sel.rows))
+                                           lik.base[sel.rows]  <-  d.multi(y = y[sel.rows,,drop=FALSE],
+                                                                           distr=distr@distr[[s]],
+                                                                           eta = eta,
+                                                                           const = distr@const,
+                                                                           log=TRUE)
+                                         lik.base
+                                       }), N)
+            } else {
+              lik.base <- matrix(sapply(sapply(distr@distr, "[[", "cont1"), 
+                                 dens, y = c(y), eta=eta, const=distr@const, log=TRUE), N)
+              # for selected rows:
+              # matrix(sapply(seq_along(distr@distr),
+              #               # basis distribution densities:
+              #               function(s) {
+              #                 lik.base <- rep(-Inf, N)
+              #                 sel.rows <- rowSums(lik.branch[,distr@map.vec == s,drop=FALSE]) != 0
+              #                 sel.rows[is.na(sel.rows)] <- TRUE
+              #                 if(any(sel.rows))
+              #                   lik.base[sel.rows]  <-  dens(distr@distr[[s]][[1]],
+              #                                                y = y[sel.rows,],
+              #                                                eta = eta,
+              #                                                const = distr@const,
+              #                                                log=TRUE)
+              #                 lik.base
+              #               }), N)
+            }
+            # for all rows: slightly faster for few branches
+            # lik.base <- matrix(sapply(seq_along(distr@distr), 
+            #                    function(s)  d.multi(y = y,
+            #                                         distr=distr@distr[[s]],
+            #                                         eta = eta,
+            #                                         const = distr@const, 
+            #                                         log=TRUE)), N)
+            # microbenchmark::microbenchmark(#f(),f2(),
+            #                                # mpt.branch.prob(mpt=distr@mpt, theta=theta),
+            #                                # t(branch.prob *  t(distr@mpt@reduce))[x,,drop=FALSE], 
+            #                                times = 1000)
             
-            lik.base <- matrix(lik.base, N)
             lik.branch <- lik.base[,distr@map.vec,drop=FALSE] + log(lik.branch)
             ll <- sum(rowLogSumExps(lik.branch))  # = log( exp(branch 1)+...+exp(branch B) )
            
@@ -112,3 +143,4 @@ setMethod("dens", signature(distr = "gpt",
               exp(ll)
             }
           })
+              

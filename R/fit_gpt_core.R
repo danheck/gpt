@@ -15,10 +15,12 @@ fit.gpt.core <- function( x, y, gpt,
     fit.grad <- fit.grad(gpt, x, y, starting.values=fit.EM$par, 
                          n.fit=n.fit[2], maxit=maxit[2], print=print)
     
-    if( TRUE != all.equal(fit.EM$par[gpt@theta], fit.grad$par[gpt@theta], tolerance=.1))
-      warning("EM and gradient estimates for MPT parameters theta differ considerably.")
-    if( TRUE != all.equal(fit.EM$par[gpt@eta], fit.grad$par[gpt@eta], tolerance=.1))
-      warning("EM and gradient estimates for eta parameters differ considerably.")
+    if (!all.equal(fit.EM$par[gpt@theta], 
+                   fit.grad$par[gpt@theta], tolerance=.1))
+      warning ("EM and gradient estimates for MPT parameters theta differ considerably.")
+    if (!all.equal(fit.EM$par[gpt@eta], 
+                   fit.grad$par[gpt@eta], tolerance=.1))
+      warning ("EM and gradient estimates for eta parameters differ considerably.")
     
   }else{
     fit.grad <- add.vcov(gpt, fit.EM$par, x, y)

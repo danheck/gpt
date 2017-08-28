@@ -38,10 +38,14 @@ setMethod("rand", signature(distr = "mpt",
           function(distr, n, theta){
             mpt <- distr
             
-            if(any(theta<0, theta>1)){
+            if (any(theta<0, theta>1)){
               stop("MPT parameters theta must be in the interval [0,1].")
               rep(NaN, sum(n))
             }
+            if (length(n) != length(mpt@tree.names))
+              stop ("Vector 'n' with number of observations does not match number of MPT trees!")
+            if (any(n<0))
+              stop ("Vector 'n' with number of observations must be nonnegative!")
             
             # model details
             B <- ncol(mpt@reduce) # branches
@@ -56,20 +60,22 @@ setMethod("rand", signature(distr = "mpt",
             prob.branch <- mpt.branch.prob(mpt, theta)
             for(tt in seq_along(mpt@tree.names)){
               
-              # select responses, categories, branches:
-              sel.resp <- 1:n[tt] + ifelse(tt <= 1, 0, sum(n[1:(tt-1)]))
-              sel.cat <- mpt@tree.idx == tt
-              sel.branch <- (1:B)[mpt@reduce.idx %in% (1:J)[sel.cat]]
-              
-              prob.branch.tmp <- prob.branch[sel.branch]
-              
-              # if(round(sum(cat.prob.tmp),10) != 1)
-              #   warning(paste("Check model definition! Probabilities do not add up to one within MPT tree", t))
-              
-              # generate latent state:
-              idx <- findInterval(randnum[sel.resp], cumsum(prob.branch.tmp) ) +1
-              z[sel.resp] <- sel.branch[idx]
-              x[sel.resp] <- mpt@reduce.idx[z[sel.resp]]
+              if (n[tt] > 0){
+                # select responses, categories, branches:
+                sel.resp <- 1:n[tt] + ifelse(tt <= 1, 0, sum(n[1:(tt-1)]))
+                sel.cat <- mpt@tree.idx == tt
+                sel.branch <- (1:B)[mpt@reduce.idx %in% (1:J)[sel.cat]]
+                
+                prob.branch.tmp <- prob.branch[sel.branch]
+                
+                # if(round(sum(cat.prob.tmp),10) != 1)
+                #   warning(paste("Check model definition! Probabilities do not add up to one within MPT tree", t))
+                
+                # generate latent state:
+                idx <- findInterval(randnum[sel.resp], cumsum(prob.branch.tmp) ) +1
+                z[sel.resp] <- sel.branch[idx]
+                x[sel.resp] <- mpt@reduce.idx[z[sel.resp]]
+              }
             }
             cbind(x, z)
           })

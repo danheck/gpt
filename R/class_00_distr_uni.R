@@ -88,6 +88,16 @@ make.distr <- function(label, eta.idx, y=NULL){
            range <- c(0, Inf)
            lower <- c(shape = 1e-8, scale = 1e-8, shift = 0)
            upper <- c(shape = Inf, scale = Inf, shift = miny)},       # shift range!
+         "mises" = {
+           dens <- "mises"
+           range <- c(-pi, pi)
+           lower <- c(mu = -pi, kappa = 0)
+           upper <- c(mu = pi, kappa = Inf)},       # shift range!
+         "unif" = {
+           dens <- "unif"
+           range <- c(-Inf, Inf)
+           lower <- c(min = -Inf, max = -Inf)
+           upper <- c(min = Inf, max = Inf)},
          {dens <-  label
          range <- c(-Inf, Inf)
          lower <- rep(-Inf, 3)

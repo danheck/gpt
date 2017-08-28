@@ -5,7 +5,7 @@
 make.gpt <- function(tab,  latent){
   
   distr <- c("exgauss", "exwald", "gamma", "weibull", 
-             "lognormal", "wald", "normal", "beta")
+             "lognormal", "wald", "normal", "beta", "mises", "unif")
   if(any(! latent %in% distr))
     warning(paste("Check definition of latent distribution functions!",
                   "\n  Should be one of those listed in help(fit.gpt).",
@@ -24,7 +24,7 @@ make.gpt <- function(tab,  latent){
   B <- nrow(tab)
   
   # assign parameters to latent states:
-  par.per.lat <- ifelse(latent %in% c("normal", "beta"), 2, 3)
+  par.per.lat <- ifelse(latent %in% c("normal", "beta", "mises", "unif"), 2, 3)
   sel.cont <- rep(1:length(latent), par.per.lat)
   X.named <- X.full <- matrix(NA, B, ncol=sum(par.per.lat))
   for(cc in 1:n.cont){

@@ -1,7 +1,7 @@
 
-#' Check GPT Model File
+#' Read GPT Object from File
 #' 
-#' Check model file and parameter restrictions
+#' Returns a \code{gpt} object and checks model file and parameter restrictions
 #' 
 #' @param file path to model file
 #' @param latent type of latent continuous distribution(s) (e.g., \code{"normal"}, \code{"gamma"}, \code{"exgauss"}, etc.). See \code{\link{fit.gpt}} for details 
@@ -23,15 +23,15 @@
 #' }
 #' @examples
 #' file <- paste0(path.package("gpt"), "/models/2htm_2normal.txt")
-#' check.gpt(file=file, latent=c("normal", "normal"))
+#' read.gpt(file=file, latent=c("normal", "normal"))
 #' # with restrictions:
-#' check.gpt(file=file, latent=c("normal", "normal"),
-#'              restrictions=list("g=.5","s1=s2=1", "m1_g=m1_d"))
+#' read.gpt(file=file, latent=c("normal", "normal"),
+#'          restrictions=list("g=.5","s1=s2=1", "m1_g=m1_d"))
 #'              
 #' # list of example model files:
 #' list.files(path = paste0(path.package("gpt"),"/models"))
 #' @export
-check.gpt <- function(file, latent, restrictions=NULL){
+read.gpt <- function(file, latent, restrictions = NULL){
   gpt <- new("gpt", file, latent, restrictions)
   gpt
 }

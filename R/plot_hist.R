@@ -47,13 +47,15 @@ hist.gpt.fit <- function(x,
     plot.args$xlab <- dots$xlab
     dots$xlab <- NULL
   }
-  plot.args <- c(plot.args, dots)
+  # plot.args <- c(plot.args, dots)
   
   par(mfrow=c(tmp, tmp), mar=c(ifelse(plot.args$xlab == "", 1, 4),4,3,.5))
   for(cc in 1:J){
     sel <- data$x == cc
-    hh <- hist(data$y[sel], plot = FALSE,
-               breaks=seq(miny,maxy,length=min(25,floor(N/(J*2)))))
+    # hh <- hist(data$y[sel], plot = FALSE, args = dots#,
+               # breaks=seq(miny,maxy,length=min(25,floor(N/(J*2))))
+               # )
+    hh <- do.call(hist, args = c(list(x = data$y[sel], plot = FALSE), dots))
     
     ############ Normalization
     dd <- unlist(pred[cc,-c(1:4)])# *scale #/pred[cc,"prob"]

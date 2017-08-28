@@ -21,12 +21,12 @@ d.multi <- function(y, distr, eta, const, log = TRUE){
   }else{
     ll <- apply(lik, 1, prod)
   }
-  return(ll)
+  ll
 }
 
 # generate multivariate data:
 r.multi <- function(n, distr, eta, const){
   Y <- mapply(rand, distr=distr, 
               MoreArgs = list(n=as.integer(n), eta=eta, const=const))
-  return(Y)
+  Y
 }

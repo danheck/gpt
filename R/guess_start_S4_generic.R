@@ -95,7 +95,7 @@ setMethod("guess.start", signature(distr = "gpt",
 
 random.start <- function(eta.lower, eta.upper, starting.values){
 
-  if(is.null(starting.values)){
+  if(missing(starting.values) || is.null(starting.values)){
     eta.start <- runif(length(eta.lower), 
                        min = pmax(eta.lower, pmin(0.1, eta.upper-.01)), # avoid -Inf
                        max = pmin(eta.upper, pmax(100, eta.lower+.01)))  # avoid +Inf

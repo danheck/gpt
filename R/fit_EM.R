@@ -14,7 +14,7 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
   starting.values <- check.input.par(par = starting.values, 
                                      names = c(gpt@theta, gpt@eta))
   
-
+  
   loglik <- iters <- rep(NA, n.fit)  
   par.mat <- matrix(NA, n.fit, P1 + P2)
   
@@ -69,17 +69,23 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
         # probability for continuous response y for all S latent states
         S <- length(gpt@distr)
         lik.base <- matrix(0, nrow(y), S)
-        for(s in 1:S){
+        if (ncol(y) > 1){
+          for(s in 1:S){
+            # only compute density for states with nonzero probability:
+            select.rows <- rowSums(E.prob[x,][,gpt@map.vec == s,drop=FALSE]) != 0
+            lik.base[select.rows,s]  <-  d.multi(y = y[select.rows,,drop=FALSE], 
+                                                 distr=gpt@distr[[s]], 
+                                                 eta = eta, 
+                                                 const = gpt@const, log=FALSE)
+          } 
+        } else {
+          lik.base  <- matrix(sapply(sapply(gpt@distr, "[[", "cont1"), dens, 
+                                     y = c(y), eta=eta, const=gpt@const, log=FALSE), 
+                              nrow(y))
           
-          # only compute density for states with nonzero probability:
-          select.rows <- rowSums(E.prob[x,][,gpt@map.vec == s,drop=FALSE]) != 0
-          lik.base[select.rows,s]  <-  d.multi(y = y[select.rows,,drop=FALSE], 
-                                               distr=gpt@distr[[s]], 
-                                               eta = eta, 
-                                               const = gpt@const, log=FALSE)
         }
         lik.branch <- lik.base[,gpt@map.vec]
-
+        
         # unobserved, complete data: state indicators (each row sums up to one)
         Z.tmp <- E.prob[x,]  * lik.branch
         
@@ -95,7 +101,7 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
       zz <- colSums(Z)
       if(P1 > 0){
         new.theta <-  ( colSums(zz* mpt@a) / 
-                           colSums( (mpt@a+mpt@b) * zz))[mpt@theta == -.5]
+                          colSums( (mpt@a+mpt@b) * zz))[mpt@theta == -.5]
         new.theta <- pmax(1e-4, pmin(1-1e-4, new.theta))
         new.theta[is.na(new.theta)] <- runif(sum(is.na(new.theta)), .3,.7)
         par2[1:P1] <- new.theta
@@ -138,14 +144,14 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
   ll.idx <- which.max(loglik)
   if(length(ll.idx) == 0){
     ll <- NA
-  }else if(max(abs(outer(loglik,loglik, "-"))) > tol*10){
-    warning("Log-likelihood differed by more than ", tol*10," across EM fitting runs:",
+  }else if(max(abs(outer(loglik,loglik, "-"))) > .01){
+    warning("Log-likelihood differed by more than ", .01," across EM fitting runs:",
             paste(round(loglik, 2), collapse = ", "))
   }
   ll <- loglik[ll.idx]
   par.best <- par.mat[ll.idx,]
   names(par.best) <-  c(gpt@theta, gpt@eta)
-
+  
   res <- list("par" = par.best, 
               "loglik" = ll, 
               "iter" = iters[ll.idx])

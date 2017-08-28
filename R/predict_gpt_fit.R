@@ -72,7 +72,7 @@ predict.gpt.fit <- function(object,
     }
     
     for(cc in 1:nrow(pred)){
-      dd <- apply(yy, 1,  function(z) dens(object$gpt, cc, matrix(z,1),  
+      dd <- apply(yy, 1,  function(z) dens(object$gpt, x = cc, y = matrix(z,1),  
                                            theta= theta, eta=eta, log = FALSE))
       pp <- sum(dd) 
       ### P(MPT cat)=pp*diff(yy)[1] # density must be scaled to y-axis!
