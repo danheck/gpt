@@ -11,7 +11,7 @@
 #' @export
 hist.gpt.fit <- function(x, 
                          dim=1, 
-                         freq = "tree", 
+                         freq = "cat", 
                          # group = 1,
                          ...){
   mfrow <- par()$mfrow

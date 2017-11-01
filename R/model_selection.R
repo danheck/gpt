@@ -20,6 +20,12 @@ gpt.select <- function (model.list){
   
   ## Information Criteria
   tab$loglik <- sapply(model.list, function (x) x$fit.grad$loglik)
+  best <- which.max(tab$loglik)
+  pars <- tab$eta + tab$theta
+  tab$delta.df <- pars[best] - pars
+  tab$delta.g2 <- - 2 * (tab$loglik - tab$loglik[best])
+  tab$delta.pval <- pchisq(tab$delta.g2, tab$delta.df, lower.tail = FALSE)
+  tab$delta.pval[best] <- NA
   tab$AIC <- sapply(model.list, gpt.aic)
   tab$delta.AIC <- tab$AIC-min(tab$AIC)
   tab$wAIC <- with(tab, exp(-.5*delta.AIC)/sum(exp(-.5*delta.AIC)))

@@ -4,7 +4,7 @@
 \alias{hist.gpt.fit}
 \title{Plot Predicted and Observed Densities}
 \usage{
-\method{hist}{gpt.fit}(x, dim = 1, freq = "tree", ...)
+\method{hist}{gpt.fit}(x, dim = 1, freq = "cat", ...)
 }
 \arguments{
 \item{x}{fitted model return from \code{\link{fit.gpt}}}

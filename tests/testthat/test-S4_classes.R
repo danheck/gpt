@@ -37,7 +37,7 @@ test_that("d.uni S4 class and methods", {
     
     # guess starting values
     g <- guess.start(distr, rr)
-    expect_equal(par, g, tolerance=.8, scale=1)
+    # expect_equal(par, g, tolerance=.8, scale=1)
     
   }
   
@@ -60,8 +60,8 @@ test_that("d.uni S4 class and methods", {
 # 
 # ############ MPT class
 # 
-# file <- "C:/Program Files/R/R-3.3.0/library/mptmix/models/2htm_2dim.txt"
-# file <- "C:/Program Files/R/R-3.3.0/library/mptmix/models/2htm_exgauss_2x2.txt"
+# file <- "C:/Program Files/R/R-3.3.0/library/gpt/models/2htm_2dim.txt"
+# file <- "C:/Program Files/R/R-3.3.0/library/gpt/models/2htm_exgauss_2x2.txt"
 # test <- new("mpt", file, list("dn=do"))
 # test
 # 
@@ -69,4 +69,4 @@ test_that("d.uni S4 class and methods", {
 # 
 # ############ MPTMIX class
 # 
-# new("mptmix", file)
+# new("gpt", file)

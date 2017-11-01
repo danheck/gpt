@@ -26,9 +26,13 @@ dexgauss <- function(x,mu,sigma,tau, log = FALSE){
 
 
 # ex-gaussian cumulative density at x
-pexgauss <- function(q,mu,sigma,tau){
+pexgauss <- function(q, mu, sigma, tau, log.p = FALSE){
   rtsu <- (q-mu)/sigma
-  pnorm(rtsu) - exp((sigma^2/(2*tau^2))-((q-mu)/tau))*pnorm(rtsu - (sigma/tau))
+  p <- pnorm(rtsu) - exp((sigma^2/(2*tau^2))-((q-mu)/tau))*pnorm(rtsu - (sigma/tau))
+  if (log.p)
+    log(p)
+  else
+    p
 }
 
 
@@ -44,52 +48,27 @@ rexgauss <- function(n,mu,sigma,tau){
 }
 
 ############## WALD / INVERSE GAUSS ############ 
-dwald <- function(x,m,a,s=0, log = FALSE) {
-  x <- x - s 
-  suppressWarnings(
-    if(!log){
-      dd <- a*exp(-(a-m*x)^2/(2*x))/sqrt(2*pi*x^3)
-    }else{
-      dd <- log(a) -(a-m*x)^2/(2*x) - log(sqrt(2*pi*x^3))
-    }
-  )
-  dd[is.na(dd)] <- ifelse(log, -Inf, 0)
-  dd
+# Heathcote's parameter labels: m, a, s
+#' @importFrom statmod dinvgauss pinvgauss rinvgauss
+dwald <- function(x, mean, shape, shift = 0, log = FALSE) {
+  const <- ifelse(log, -Inf, 0)
+  ifelse(x <= shift, const, dinvgauss(x - shift, mean, shape, log = log))
 }
-# log(dwald(100, 3, 4, 2))
-# dwald(100, 3, 4, 2, log=TRUE)
-
-# Shifted Wald cumulative density with protection against numerical error
-pwald <- function(q,m,a,s=0, log.p = FALSE) {
-  q <- q - s
-  sqrtw <- sqrt(q)
-  k1 <- (m*q-a)/sqrtw
-  k2 <- (m*q+a)/sqrtw
-  p1 <- exp(2*a*m)
-  p2 <- pnorm(-k2)
-  bad <- (p1==Inf) | (p2==0); p <- p1*p2
-  p[bad] <- (exp(-(k1[bad]^2)/2 - 0.94/(k2[bad]^2))/(k2[bad]*((2*pi)^.5)))
-  if(!log.p){
-    pp <- p + pnorm(k1)
-  }else{
-    pp <- log(p + pnorm(k1))
-  }
-  # pp[is.na(pp)] <- ifelse(log.p, -Inf, 0)
-  pp
+pwald <- function(q, mean, shape, shift=0, log.p = FALSE) {
+  const <- ifelse(log.p, -Inf, 0)
+  ifelse(q <= shift, const, pinvgauss(q - shift, mean, shape, log.p = log.p))
 }
-
-# Shifted Wald random function adapted from pp. 79-80, Dagpunar, J. (1988). 
-# Principles of Random Variate Generation. Clarendon Press, Oxford.
-rwald <- function(n,m,a,s=0) {
-  if(length(n)>1) n <- length(n);
-  if(length(m)>1 && length(m)!=n) m <- rep(m,length=n)
-  if(length(a)>1 && length(a)!=n) lambda <- rep(a,length=n)
-  y2 <- rchisq(n,1); y2onm <- y2/m; u <- runif(n)
-  r1 <- (2*a + y2onm - sqrt(y2onm*(4*a+y2onm)))/(2*m)
-  r2 <- (a/m)^2/r1
-  ifelse(u < a/(a+m*r1), s+r1, s+r2)
+rwald <- function(n, mean, shape, shift=0) {
+  shift + rinvgauss(n, mean, shape)
 }
-
+# library(statmod)
+# curve(dwald(x, 300, 600, 300), 0, 2000)
+# integrate(function(x) x*dwald(x, 300, 600, 300), 0, 5000)
+# integrate(function(x) (x-600)^2*dwald(x, 300, 600, 300), 0, 10000)
+# var(rwald(10000, 300, 600, 300))
+# 300^3 / 600
+# abline(v = 300 + 300, ) # mean + shift // SD = sqrt(mean^3 / shape)
+# curve(pwald(x, 300, 600, 300), 0, 2000)
 
 
 
@@ -122,19 +101,17 @@ dexwald <- function(x,m,a,t, log = FALSE) {
 # log(dexwald(100, 3, 4, 2))
 # dexwald(100, 3, 4, 2, log=TRUE)
 
-pexwald <- function(q,m,a,t) {
+pexwald <- function(q,m,a,t, log.p = FALSE) {
   pp <- pwald(q,m,a) - t*dexwald(q,m,a,t)
-  pp[is.na(pp)] <- ifelse(log, -Inf, 0)
-  pp
+  pp[is.na(pp)] <- 0
+  if (log.p)
+    log(pp)
+  else
+    pp
 }
 rexwald <- function(n,m,a,t) {
   rwald(n,m,a) + rexp(n,1/t)
 }
-
-
-
-
-
 
 
 

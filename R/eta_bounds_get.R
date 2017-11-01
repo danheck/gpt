@@ -37,7 +37,7 @@ get.eta.upper <- function(gpt){
       eta.free <- cc@eta.idx > 0
       if (any(eta.free)){
         eta.idx <- cc@eta.idx[eta.free]
-        upper[eta.idx] <- pmax(upper[eta.idx], cc@upper[eta.free])
+        upper[eta.idx] <- pmin(upper[eta.idx], cc@upper[eta.free])
       }
       # upper[cc@eta.idx] <- pmax(upper[cc@eta.idx], cc@upper)
     }

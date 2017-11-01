@@ -54,10 +54,10 @@ make.distr <- function(label, eta.idx, y=NULL){
            lower <- c(mean = -Inf, sd = 0)
            upper <- c(mean = Inf, sd = Inf)},
          "lognormal" = {
-           dens <- "logNormal" 
+           dens <- "lognorm" 
            range <- c(0, Inf)
-           lower <- c(mean = -Inf, sd = 0, shift = 0)
-           upper <- c(mean = Inf, sd = Inf, shift = miny)},    # shift range!
+           lower <- c(mu = -Inf, sigma = 0, shift = 0)
+           upper <- c(mu = Inf, sigma = Inf, shift = miny)},    # shift range!
          "beta" = {
            dens <- "beta"  
            range <- c(0, 1)
@@ -66,8 +66,8 @@ make.distr <- function(label, eta.idx, y=NULL){
          "gamma" = {
            dens <- "sgamma"
            range <- c(0, Inf)
-           lower <- c(shape = 0, rate = 1e-8, shift = 0)     # shift range!
-           upper <- c(shape = Inf, rate = Inf, shift = miny)},
+           lower <- c(shape = 0, scale = 1e-8, shift = 0)     # shift range!
+           upper <- c(shape = Inf, scale = Inf, shift = miny)},
          "exgauss" = {
            dens <- "exgauss"
            range <- c(0, Inf)
@@ -76,15 +76,15 @@ make.distr <- function(label, eta.idx, y=NULL){
          "wald" = {
            dens <- "wald"
            range <- c(-Inf, Inf)
-           lower <- c(m = 1e-8, a = 1e-8, s = 0)
-           upper <- c(m = Inf, a = Inf, s = miny)},         # shift range!
+           lower <- c(mean = 1e-8, shape = 1e-8, shift = 0)
+           upper <- c(mean = Inf,  shape = Inf, shift = miny)},         # shift range!
          "exwald" = {
            dens <- "exwald"
            range <- c(0, Inf)
            lower <- c(m = 1e-8, a = 1e-8, t = 1e-3)
            upper <- c(m = Inf, a = Inf, t = Inf)},
          "weibull" = {
-           dens <- "Weibull"
+           dens <- "sweibull"
            range <- c(0, Inf)
            lower <- c(shape = 1e-8, scale = 1e-8, shift = 0)
            upper <- c(shape = Inf, scale = Inf, shift = miny)},       # shift range!

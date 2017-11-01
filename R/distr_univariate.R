@@ -49,46 +49,53 @@ rmises <- function(n, mu = 0, kappa=1){
 
 
 
-############## LOGNORMAL ############ 
+############## shifted LOGNORMAL ############ 
 # mean, sd, shift
-dlogNormal <- function(x, mu = 1, sigma=.1, nu=0, log=FALSE){
-  suppressWarnings(
-    dd <- dnorm(log(x-nu), 
-                mean = mu, 
-                sd = sigma, log=log)
-  )
+dlognorm <- function(x, mu = 4, sigma = 1, shift = 0, log=FALSE){
+  if (log)
+    suppressWarnings(dd <- dnorm(log(x - shift), mean = mu, sd = sigma, log=TRUE)- log(x - shift) )
+  else
+    suppressWarnings(dd <- dnorm(log(x - shift), mean = mu, sd = sigma) /(x - shift) )
   dd[is.na(dd)] <- ifelse(log, -Inf, 0)
-  return(dd)
+  dd 
 }
-rlogNormal <- function(n, mu = 1, sigma=.1, nu=0){
-  x <- rnorm(n, mean=mu, sd=sigma)
-  return(nu + exp(x))
+rlognorm <- function(n, mu = 4, sigma = 1, shift = 0){
+  shift + rnorm(n, mean = mu, sd = sigma)
 }
+plognorm <- function(q, mu = 4, sigma = 1, shift = 0, log.p = FALSE){
+  suppressWarnings(p <- pnorm(log(q - shift), mean = mu, sd = sigma, log.p = log.p))
+  p[is.na(p)] <- ifelse(log.p, -Inf, 0)
+  p
+}
+# curve(gpt:::dlognorm(x, 4.5, 1, 00), 0, 2000)
+# curve(gpt:::plognorm(x, 4.5, 1, 00), 0, 2000)
 
 
-########### WEIBULL  ############ 
-dWeibull <- function(x, shape, scale, shift, log=FALSE){
-  lik <- dweibull(x-shift, 
-                  shape=shape, 
-                  scale=scale, log=log)
-  return(lik)
+########### shifted WEIBULL  ############ 
+dsweibull <- function(x, shape, scale, shift, log = FALSE){
+  dweibull(x-shift, shape=shape, scale=scale, log = log)
 }
-rWeibull <- function(n, shape, scale, shift){    
-  x <- shift + rweibull(n, shape=shape, scale=scale)
-  return(x)
+rsweibull <- function(n, shape, scale, shift){    
+  shift + rweibull(n, shape=shape, scale=scale)
 }
+psweibull <- function(q, shape, scale, shift, log.p = FALSE){    
+  pweibull(q - shift, shape=shape, scale=scale, log.p = log.p)
+}
+# curve(gpt:::psweibull(x, 1.5, 500, 300), 0, 2000)
+# curve(gpt:::dsweibull(x, 1.5, 500, 300), 0, 2000)
 
-######### shifted gamma
-dsgamma <- function(x, shape, rate, shift, log=FALSE){
-  lik <- dgamma(x-shift, 
-                shape=shape,
-                rate=rate, 
-                log=log)
-  return(lik)
+
+######### shifted GAMMA
+dsgamma <- function(x, shape, scale, shift, log = FALSE){
+  dgamma(x - shift, shape=shape, scale=scale, log=log)
 }
-rsgamma <- function(n, shape, rate, shift){    
-  x <- shift + rgamma(n, shape=shape, rate=rate)
-  return(x)
+rsgamma <- function(n, shape, scale, shift){    
+  shift + rgamma(n, shape = shape, scale = scale)
 }
+psgamma <- function(q, shape, scale, shift, log.p = FALSE){
+  pgamma(q - shift, shape = shape, scale = scale, log = log.p)
+}
+# curve(gpt:::dsweibull(x, 1.5, 500, 300), 0, 2000)
+
 
 

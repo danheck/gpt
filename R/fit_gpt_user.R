@@ -21,14 +21,15 @@
 #' 
 #' @details The following paramaters are used to specify the latent distributions (will be assigned in this order to the parameters listed in the model file as last argument in each row/branch):
 #' \itemize{
-#' \item{\code{"normal"}:}{mean and SD}
-#' \item{\code{"exgauss"} (sum of normal and independent exponential):}{mean and SD of normal; mean of exponential}
-#' \item{\code{"gamma"}:}{ shape, scale, shift}
-#' \item{\code{"weibull"}:}{shape, scale, shift}
-#' \item{\code{"lognormal"}:}{mean, SD, shift}
-#' \item{\code{"wald"} (= inverse normal):}{mean, shape, shift}
+#' \item{\code{"normal"}:}{mean (mu) and SD (sigma)}
+#' \item{\code{"exgauss"} (sum of normal and independent exponential):}{mean and SD of normal (mu, sigma); mean of exponential (tau)}
+#' \item{\code{"gamma"}:}{ shape (k), scale (theta), shift}
+#' \item{\code{"weibull"}:}{shape (k), scale (lambda), shift}
+#' \item{\code{"lognormal"}:}{mean and SD (of normal distribution before taking log), shift}
+#' \item{\code{"wald"} (= inverse normal):}{mean (mu), shape (lambda), shift}
 #' \item{\code{"exwald"} (= sum of inverse normal and independent exponential):}{mean, shape, shift}
-#' \item{\code{"beta"}:}{shape1 and shape2, see \link{dbeta}}
+#' \item{\code{"beta"}:}{shape1 (alpha) and shape2 (beta), see \link{dbeta}}
+#' \item{\code{"vonmises"}:}{mu (mean), kappa (concentration) of von Mises distribution for circular data. }
 #' }
 #' @examples
 #' \dontrun{
@@ -47,9 +48,9 @@
 #' }
 #' @export
 fit.gpt <- function(x, y, data, file, latent, 
-                       group=NULL, restrictions=NULL, baseline=FALSE,
-                       starting.values=NULL, eta.lower=NULL, eta.upper=NULL, 
-                       n.fit=c(2,1), maxit=c(50, 2000), EM.tol=.01, cpu=NULL, print=FALSE){
+                    group=NULL, restrictions=NULL, baseline=FALSE,
+                    starting.values=NULL, eta.lower=NULL, eta.upper=NULL, 
+                    n.fit=c(3,1), maxit=c(300, 2000), EM.tol=.01, cpu=NULL, print=FALSE){
   
   # build model structure:
   gpt <- new("gpt", file, latent, restrictions)
@@ -67,11 +68,11 @@ fit.gpt <- function(x, y, data, file, latent,
   if(is.null(group) || length(unique(group))==1){
     # adjust bounds for eta parameters:
     gpt <- adjust.bounds(gpt = gpt, y = y, 
-                            eta.lower = eta.lower, eta.upper = eta.upper) 
+                         eta.lower = eta.lower, eta.upper = eta.upper) 
     
     fit <- fit.gpt.core(x=x,y=y,  gpt=gpt, 
-                           baseline=baseline, starting.values=starting.values, 
-                           n.fit=n.fit, EM.tol=EM.tol, maxit=maxit, print = print)
+                        baseline=baseline, starting.values=starting.values, 
+                        n.fit=n.fit, EM.tol=EM.tol, maxit=maxit, print = print)
     
   }else{
     # multiple data sets:  
@@ -80,11 +81,11 @@ fit.gpt <- function(x, y, data, file, latent,
       xx <- x[sel]
       yy <- y[sel,,drop=FALSE]
       gpt <- adjust.bounds(gpt = gpt, y = yy, 
-                              eta.lower = eta.lower, eta.upper = eta.upper) 
+                           eta.lower = eta.lower, eta.upper = eta.upper) 
       
       fit.gpt.core(x=xx,y=yy, gpt = gpt, 
-                      baseline=baseline, starting.values=starting.values, 
-                      n.fit=n.fit, EM.tol=EM.tol, maxit=maxit)
+                   baseline=baseline, starting.values=starting.values, 
+                   n.fit=n.fit, EM.tol=EM.tol, maxit=maxit)
     }
     
     if(missing(cpu) || is.null(cpu)){

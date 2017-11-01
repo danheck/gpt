@@ -26,7 +26,7 @@
 gen.gpt <- function(n, theta, eta, file, latent, restrictions=NULL){
   
   # build S4 model:
-  gpt <- new("gpt", file=file, latent=latent, 
+  gpt <- new("gpt", file = file, latent=latent, 
                 restrictions=restrictions)
   
   # check parameters

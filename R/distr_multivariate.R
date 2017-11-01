@@ -30,3 +30,20 @@ r.multi <- function(n, distr, eta, const){
               MoreArgs = list(n=as.integer(n), eta=eta, const=const))
   Y
 }
+
+p.multi <- function(y, distr, eta, const, log.p = TRUE){
+  
+  lik <- mapply(cdf, distr=distr, 
+                y=data.frame(y),  #as.list(data.frame(as.matrix(y)))
+                MoreArgs = list(eta=eta, const=const, log.p = log.p))
+  if (nrow(y) == 1)
+    lik <- matrix(lik, 1)
+  
+  # product distributions: multiply likelihood!
+  if (log.p){
+    ll <- rowSums(lik)
+  } else {
+    ll <- apply(lik, 1, prod)
+  }
+  ll
+}
