@@ -60,14 +60,15 @@ dlognorm <- function(x, mu = 4, sigma = 1, shift = 0, log=FALSE){
   dd 
 }
 rlognorm <- function(n, mu = 4, sigma = 1, shift = 0){
-  shift + rnorm(n, mean = mu, sd = sigma)
+  shift + exp(rnorm(n, mean = mu, sd = sigma))
 }
 plognorm <- function(q, mu = 4, sigma = 1, shift = 0, log.p = FALSE){
   suppressWarnings(p <- pnorm(log(q - shift), mean = mu, sd = sigma, log.p = log.p))
   p[is.na(p)] <- ifelse(log.p, -Inf, 0)
   p
 }
-# curve(gpt:::dlognorm(x, 4.5, 1, 00), 0, 2000)
+# curve(gpt:::dlognorm(x, 5, .6, 100), 0, 1200, col=2, lwd = 2)
+# hist(gpt:::rlognorm(10000, 5, .6, 100), 100, freq = FALSE, add=T)
 # curve(gpt:::plognorm(x, 4.5, 1, 00), 0, 2000)
 
 
@@ -93,7 +94,7 @@ rsgamma <- function(n, shape, scale, shift){
   shift + rgamma(n, shape = shape, scale = scale)
 }
 psgamma <- function(q, shape, scale, shift, log.p = FALSE){
-  pgamma(q - shift, shape = shape, scale = scale, log = log.p)
+  pgamma(q - shift, shape = shape, scale = scale, log.p = log.p)
 }
 # curve(gpt:::dsweibull(x, 1.5, 500, 300), 0, 2000)
 

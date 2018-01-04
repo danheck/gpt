@@ -1,4 +1,37 @@
 
+# NOTE: user.defined overwrites the automatic search for boundaries (necessary for reparameterization)
+get.eta.bound <- function (gpt, lower = TRUE, user.defined = NULL, warning = FALSE){
+  
+  bnd <- rep(ifelse(lower, -Inf, Inf), length(gpt@eta))
+  names(bnd) <- gpt@eta
+  
+  if (!all(gpt@eta.repar %in% gpt@eta)){
+    # only show warning once:
+    if (warning)
+      warning("Please make sure to define sensible bounds via 'eta.lower'/'eta.upper' \n",
+              "  when using reparameterized functions for the component parameters eta!")
+    if (!missing(user.defined) && !is.null(user.defined))
+      bnd[names(user.defined)] <- user.defined #[gpt@eta]
+    
+  } else {
+    for(base in gpt@distr){
+      for(cc in base){
+        eta.free <- cc@eta.idx > 0
+        if (any(eta.free)){
+          # eta.idx <- cc@eta.idx[eta.free]  # old version without eta.repar
+          eta.idx <- gpt@eta.repar[cc@eta.idx[eta.free]]
+          if (lower)
+            bnd[eta.idx] <- pmax(bnd[eta.idx], cc@lower[eta.free])
+          else
+            bnd[eta.idx] <- pmin(bnd[eta.idx], cc@upper[eta.free])
+        }
+      }
+    }
+  }
+  bnd
+}
+
+
 # get vector of lower bounds for gpt model
 get.eta.lower <- function(gpt){
   

@@ -2,18 +2,17 @@
 #' 
 #' Plot predicted against observed continuous distributions (only for group = 1)
 #' 
-#' @param x fitted model return from \code{\link{fit.gpt}}
-#' @param freq how to normalize histogram and density. Either per category (\code{freq = "cat"}), per tree (\code{freq = "tree"}), or in absolute frequencies (\code{freq = "freq"})
+#' @param x fitted GPT model as returned by \code{\link{gpt_fit}}
+#' @param freq how to normalize histogram and density. 
+#'     Either per category (\code{freq = "cat"}), per tree (\code{freq = "tree"}), 
+#'     or in absolute frequencies (\code{freq = "freq"}).
 # ' @param group group to plot (not tested!)
-#' @inheritParams predict.gpt.fit
+#' @inheritParams predict.gpt_fit
 #' @param ... further arguments passt to \code{\link{hist}}
 #' @importFrom graphics hist lines par plot points text
 #' @export
-hist.gpt.fit <- function(x, 
-                         dim=1, 
-                         freq = "cat", 
-                         # group = 1,
-                         ...){
+hist.gpt_fit <- function(x, dim=1, freq = "cat", # group = 1,
+                     ...){
   mfrow <- par()$mfrow
   mar <- par()$mar
   

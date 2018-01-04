@@ -4,47 +4,39 @@
 # @export
 #' @import methods 
 gpt <- setClass("gpt",  
-                   representation(mpt = "mpt",          # MPT structure
-                                  map.vec = "integer",   # link MPT branches to distributions
-                                  distr = "list",        # list of univariate basis distributions
-                                  theta = "character",   # parameter labels
-                                  eta = "character",
-                                  const = "numeric"),
-                   validity = function(object){
-                     
-                     
-                     if(length(unique(map.vec)) != S | any(sort.int(unique(map.vec)) != 1:S)   )
-                       stop("map.vec should contain indices 1,2,3,....,S (S=number of latent continuous distributions")
-                     
-                     
-                     
-                     
-                     
-                   }
-)
+                representation(mpt = "mpt",              # MPT structure
+                               map = "integer",          # link MPT branches to distributions
+                               distr = "list",           # list of univariate basis distributions
+                               theta = "character",      # parameter labels
+                               eta = "character",        # eta parameter labels, e.g.: "m1","m2"
+                               eta.repar = "character",  # expressions used to reparameterize eta, e.g.:  "m1+m2"
+                               const = "numeric"),
+                validity = function(object){
+                  
+                  if(length(unique(map)) != S | any(sort.int(unique(map)) != 1:S)   )
+                    stop("'map' must contain integers 1,2,3,....,S (S=number of latent continuous distributions")
+                })
 
-# 
 setMethod(
   f="initialize",
   signature="gpt",
   definition = function(.Object, file, latent, restrictions=NULL){
-    tab <- read.file.to.tab(file)
+    
     
     mpt <- new("mpt", file, restrictions)
-    gpt <- make.gpt(tab, latent=latent)
-    
     .Object@mpt <- mpt
-    .Object@map.vec <- as.integer(gpt$map.vec)
     .Object@theta <- colnames(mpt@a)[mpt@theta == -.5]
     
-    gpt.res <- restrict.mix(gpt, restrictions)    
-    .Object@distr <- gpt.res$distr
-    .Object@eta <- gpt.res$eta.names
-    .Object@const <- gpt.res$const
-    .Object@map.vec <- as.integer(gpt.res$map.vec)
+    tab <- read.file.to.tab(file)
+    gpt <- make.gpt(tab, latent=latent, restrictions = restrictions)
+    # gpt.res <- restrict.mix(gpt, restrictions)    
+    # restrictions still apply to the eta.names parameters
+    .Object@distr <- gpt$distr
+    .Object@eta <- gpt$eta.names
+    .Object@eta.repar <- gpt$eta.repar
+    .Object@const <- numeric(0) #gpt$const
+    .Object@map <- as.integer(gpt$map)
     
-    return(.Object)
+    .Object
   }
 )
-
-# new("gpt", file, c("normal", "normal"), restrictions)

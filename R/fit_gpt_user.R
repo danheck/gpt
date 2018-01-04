@@ -40,24 +40,23 @@
 #'          lambda_dn=300)          # exGaussian parameters
 #' 
 #' file <- paste0(path.package("gpt"), "/models/2htm_exgauss.txt")
-#' gen <- gen.gpt(n=n, theta=theta, eta=eta, latent="exgauss", file=file)
-#' fit <- fit.gpt(x=gen$x, y=gen$y, latent="exgauss", file=file, 
+#' gen <- gpt_gen(n=n, theta=theta, eta=eta, latent="exgauss", file=file)
+#' fit <- gpt_fit(x=gen$x, y=gen$y, latent="exgauss", file=file, 
 #'                restrictions=list("do=dn", "lambda_do=lambda_dn", 
 #'                                  "lambda_go=lambda_gn"))
 #' fit
 #' }
 #' @export
-fit.gpt <- function(x, y, data, file, latent, 
+gpt_fit <- function(x, y, data, file, latent, 
                     group=NULL, restrictions=NULL, baseline=FALSE,
                     starting.values=NULL, eta.lower=NULL, eta.upper=NULL, 
-                    n.fit=c(3,1), maxit=c(300, 2000), EM.tol=.01, cpu=NULL, print=FALSE){
+                    n.fit=c(3,1), maxit=c(300, 1000), EM.tol=.01, cpu=NULL, print=FALSE){
   
   # build model structure:
   gpt <- new("gpt", file, latent, restrictions)
   
   # check data input:
-  data.checked <- data.check(mpt=gpt@mpt, x=x, y=y, 
-                             data=data, group=group)
+  data.checked <- data.check(mpt=gpt@mpt, x=x, y=y, data=data, group=group)
   x <- data.checked$x 
   y <- data.checked$y
   group <- data.checked$group
@@ -67,24 +66,22 @@ fit.gpt <- function(x, y, data, file, latent,
   # fit single data set:
   if(is.null(group) || length(unique(group))==1){
     # adjust bounds for eta parameters:
-    gpt <- adjust.bounds(gpt = gpt, y = y, 
-                         eta.lower = eta.lower, eta.upper = eta.upper) 
+    gpt <- adjust.bounds(gpt = gpt, y = y, eta.lower = eta.lower, eta.upper = eta.upper) 
     
-    fit <- fit.gpt.core(x=x,y=y,  gpt=gpt, 
-                        baseline=baseline, starting.values=starting.values, 
+    fit <- gpt_fit.core(x=x,y=y,  gpt=gpt, baseline=baseline, 
+                        starting.values=starting.values, eta.lower = eta.lower, eta.upper = eta.upper, 
                         n.fit=n.fit, EM.tol=EM.tol, maxit=maxit, print = print)
     
-  }else{
+  } else {
     # multiple data sets:  
     fit.i <- function(i){
       sel <- group == unique(group)[i]
       xx <- x[sel]
       yy <- y[sel,,drop=FALSE]
-      gpt <- adjust.bounds(gpt = gpt, y = yy, 
-                           eta.lower = eta.lower, eta.upper = eta.upper) 
+      gpt <- adjust.bounds(gpt = gpt, y = yy, eta.lower = eta.lower, eta.upper = eta.upper) 
       
-      fit.gpt.core(x=xx,y=yy, gpt = gpt, 
-                   baseline=baseline, starting.values=starting.values, 
+      gpt_fit.core(x=xx,y=yy, gpt = gpt, baseline=baseline, 
+                   starting.values=starting.values, eta.lower = eta.lower, eta.upper = eta.upper,  
                    n.fit=n.fit, EM.tol=EM.tol, maxit=maxit)
     }
     
@@ -138,7 +135,7 @@ fit.gpt <- function(x, y, data, file, latent,
                 gpt=gpt,
                 input = list(file=file, latent=latent, restrictions=restrictions)))
   
-  class(res) <- "gpt.fit"
+  class(res) <- "gpt_fit"
   return(res)
 }
 

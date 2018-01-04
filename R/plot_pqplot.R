@@ -1,38 +1,37 @@
-
 #' Plot Predicted vs. Observed Quantiles
 #' 
-#' Plot predicted vs. observed quantiles of continuous variable against predicted and observed (cumulative) category probabilities
-#' @param model fitted GPT model (see \code{\link{fit.gpt}})
-#' @param cumsum whether to use cumulative sums of probabilities on the x axis (especially usefull for trees with more than 2 categories). 
+#' Plot predicted vs. observed quantiles of continuous variable against predicted 
+#' and observed (cumulative) category probabilities
+#' 
+#' @param cumsum whether to use cumulative sums of probabilities on the x axis 
+#'     (especially usefull for trees with more than 2 categories). 
 #' @param quantiles used for continuous variable
 #' @param ncol maximum number of plots per row
-#' @inheritParams predict.gpt.fit
+#' @inheritParams predict.gpt_fit
+#' @inheritParams test_fit
+#' 
 #' @export
-pqplot <- function(model, 
-                   cumsum=FALSE, 
-                   quantiles=seq(.1,.9,.2), 
-                   ncol=4, 
-                   dim=1,
-                   group){
+pqplot <- function(gpt_fit, cumsum = FALSE, quantiles = seq(.1,.9,.2),
+                   ncol = 4, dim = 1, group){
   mfrow <- par()$mfrow
   mar <- par()$mar
   
-  cat.names <- model$gpt@mpt@cat.names
-  model <- subset.gpt.fit(model, group)
-  x <- model$data$x
-  y <- model$data$y[,dim]
+  cat.names <- gpt_fit$gpt@mpt@cat.names
+  gpt_fit <- subset.gpt_fit(gpt_fit, group)
+  x <- gpt_fit$data$x
+  y <- gpt_fit$data$y[,dim]
   N <- length(x)
   freq <- c(table(factor(x, labels=cat.names)))
   
   # predictions
-  pred <- obs <- predict(model, quantiles=quantiles, dim=dim)
+  pred <- obs <- predict(gpt_fit, quantiles=quantiles, dim=dim)
   sel.q <- 4+1:length(quantiles)
   
-  N.per.tree <- c(by(freq, model$gpt@mpt@tree.idx, sum))
-  names(N.per.tree) <- model$gpt@mpt@tree.names
+  N.per.tree <- c(by(freq, gpt_fit$gpt@mpt@tree.idx, sum))
+  names(N.per.tree) <- gpt_fit$gpt@mpt@tree.names
   cnt <- 0
   for(tt in 1:length(N.per.tree)){
-    sel <- which(model$gpt@mpt@tree.idx == tt)
+    sel <- which(gpt_fit$gpt@mpt@tree.idx == tt)
     cats <- obs$cat[sel]
     
     # observed probabilities and quantiles
@@ -54,7 +53,7 @@ pqplot <- function(model,
   aa <- ceiling( length(N.per.tree)/bb)
   par(mfrow=c(aa,bb), mar=c(2,2,2,.5))
   for(tt in 1:length(N.per.tree)){    
-    sel <- which(model$gpt@mpt@tree.idx == tt)
+    sel <- which(gpt_fit$gpt@mpt@tree.idx == tt)
     cats <- cat.names[sel]
     
     plot(x=obs$prob[sel], obs[sel,5], type="p", xlim=0:1, col="blue",

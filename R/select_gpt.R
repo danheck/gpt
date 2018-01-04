@@ -1,46 +1,48 @@
-
-
-#' Compare GPT Models
+#' Model Selection for GPT Models
 #' 
 #' Currently, works only for models fitted to a single dataset
 #' 
-#' @param model.list list of fitted gpt-models (see \code{\link{fit.gpt}})
-#' @seealso \code{\link{lr.test}}
+#' @param ... fitted GPT models (see \code{\link{gpt_fit}})
+#' @param gpt_fits a list of fitted GPT models that are added to \code{...}
+#' 
+#' @seealso \code{\link{test_nested}}
 #' @export
-gpt.select <- function (model.list){
-  MM <- length(model.list)
+select_gpt <- function (..., gpt_fits = list()){
+  
+  gpt_fits <- c(list(...),  gpt_fits)
+  MM <- length(gpt_fits)
   tab <- data.frame("Model" = 1:MM)
   
   ## Model Information
-  tab$theta <- unlist(lapply(model.list, 
+  tab$theta <- unlist(lapply(gpt_fits, 
                              function (x) length(x$gpt@theta)))
-  tab$eta <- unlist(lapply(model.list, function (x) length(x$gpt@eta)))
-  tab$N <- unlist(lapply(model.list, function (x) length(x$data$x)))
+  tab$eta <- unlist(lapply(gpt_fits, function (x) length(x$gpt@eta)))
+  tab$N <- unlist(lapply(gpt_fits, function (x) length(x$data$x)))
   
   
   ## Information Criteria
-  tab$loglik <- sapply(model.list, function (x) x$fit.grad$loglik)
+  tab$loglik <- sapply(gpt_fits, function (x) x$fit.grad$loglik)
   best <- which.max(tab$loglik)
   pars <- tab$eta + tab$theta
   tab$delta.df <- pars[best] - pars
   tab$delta.g2 <- - 2 * (tab$loglik - tab$loglik[best])
   tab$delta.pval <- pchisq(tab$delta.g2, tab$delta.df, lower.tail = FALSE)
   tab$delta.pval[best] <- NA
-  tab$AIC <- sapply(model.list, gpt.aic)
+  tab$AIC <- sapply(gpt_fits, gpt.aic)
   tab$delta.AIC <- tab$AIC-min(tab$AIC)
   tab$wAIC <- with(tab, exp(-.5*delta.AIC)/sum(exp(-.5*delta.AIC)))
-  tab$BIC <- unlist(lapply(model.list, gpt.bic))
+  tab$BIC <- unlist(lapply(gpt_fits, gpt.bic))
   tab$delta.BIC <- tab$BIC-min(tab$BIC)
   tab$wBIC <- with(tab, exp(-.5*delta.BIC)/sum(exp(-.5*delta.BIC)))
   
   
-  if(is.null(names(model.list))){
+  if(is.null(names(gpt_fits))){
     rownames(tab) <- paste("Model", 1:MM)
   }else{
-    rownames(tab) <- names(model.list)
+    rownames(tab) <- names(gpt_fits)
   }
   
-  return(tab)
+  tab
 }
 
 

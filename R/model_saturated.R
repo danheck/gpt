@@ -66,7 +66,7 @@ setMethod("model.sat",
             gpt.sat@mpt <- model.sat(model@mpt)
             
             # saturated continuous structure:
-            gpt.sat@map.vec <- 1:CC
+            gpt.sat@map <- 1:CC
             gpt.sat@theta <- names(gpt.sat@mpt@theta)
             gpt.sat@const <- numeric()
             

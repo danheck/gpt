@@ -9,16 +9,17 @@
 
 d.multi <- function(y, distr, eta, const, log = TRUE){
   
-  lik <- mapply(dens, distr=distr, 
-                y=data.frame(y),  #as.list(data.frame(as.matrix(y)))
-                MoreArgs = list(eta=eta, const=const, log=log))
-  if(nrow(y) == 1)
-    lik <- matrix(lik, 1)
+  lik <- mapply(dens, distr=distr, y=data.frame(y),
+                MoreArgs = list(eta=eta, const=const, log=log), 
+                SIMPLIFY = FALSE)
+  lik <- do.call("cbind", lik)
+  # if(nrow(y) == 1)
+  #   lik <- matrix(lik, 1)
   
   # product distributions: multiply likelihood!
-  if(log){
+  if (log){
     ll <- rowSums(lik)
-  }else{
+  } else {
     ll <- apply(lik, 1, prod)
   }
   ll
@@ -33,11 +34,12 @@ r.multi <- function(n, distr, eta, const){
 
 p.multi <- function(y, distr, eta, const, log.p = TRUE){
   
-  lik <- mapply(cdf, distr=distr, 
-                y=data.frame(y),  #as.list(data.frame(as.matrix(y)))
-                MoreArgs = list(eta=eta, const=const, log.p = log.p))
-  if (nrow(y) == 1)
-    lik <- matrix(lik, 1)
+  lik <- mapply(cdf, distr=distr, y=data.frame(y),
+                MoreArgs = list(eta=eta, const=const, log.p = log.p), 
+                SIMPLIFY = FALSE)
+  lik <- do.call("cbind", lik)
+  # if (nrow(y) == 1)
+  #   lik <- matrix(lik, 1)
   
   # product distributions: multiply likelihood!
   if (log.p){

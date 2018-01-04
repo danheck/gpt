@@ -14,21 +14,21 @@ select.data <- function(data, group){
 }
 
 
-subset.gpt.fit <- function(x, group){
-  if(missing(group) && !is.null(x$data$group)){
+subset.gpt_fit <- function(x, group){
+  if (missing(group) && !is.null(x$data$group)){
     stop("Group index must be specified to get predictions.")
-  }else if(!is.null(x$data$group)){
+  } else if (!is.null(x$data$group)){
     if(group %in% x$data$group){
       sel <- x$data$group == group
-    }else if(is.numeric(group)){
+    } else if(is.numeric(group)){
       sel <- x$data$group == unique(x$data$group)[group]
-    }else{
-      stop("group must either be numeric or match one of the group labels")
+    } else {
+      stop ("group must either be numeric or match one of the group labels")
     }
     x <- c(x$individual.fits[[group]],  # fit.EM, fit.grad, test
            list(data = select.data(x$data, group),
                 gpt=x$gpt, input = x$input))
-    class(x) <- "gpt.fit"
+    class(x) <- "gpt_fit"
   }
   x
 }

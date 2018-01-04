@@ -19,12 +19,13 @@ A dataset containing 'old' and 'new' responses of a single participant from a 2x
 \dontrun{
 head(heck2016)
 file <- paste0(path.package("gpt"), "/models/2htm_exgauss_2x2.txt")
-fit <- fit.gpt("cat", "rt", heck2016, file=file,
-                 latent="exgauss", n.fit=c(1,1),
-                 restrictions=list("dn_s=do_s", "dn_w=do_w"))
+fit <- gpt_fit("cat", "rt", heck2016, file=file,
+               latent="exgauss", n.fit=c(1,1),
+               restrictions=list("dn_s=do_s", "dn_w=do_w"))
 fit
-qplot(fit)
-cdf(fit)
+pqplot(fit)
+hist(fit)
+plot(fit)
 }
 }
 \keyword{datasets}

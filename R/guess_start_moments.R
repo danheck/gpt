@@ -52,12 +52,12 @@ guess.moments <- function(y, label, p = .9){
                   
                   "wald" = {
                     # heathcote (2004) BRM
-                    y <- rwald(10000, 600, 400, 200)
-                    curve(dwald(x, 600, 400, 200), 0, 2000)
-                    s <- p*min(y)
-                    ys <- y - s
+                    # y <- statmod:::rinvgauss(10000, 600, 400) + 320
+                    # curve(statmod:::dinvgauss(x - 320, 600, 400, 200), 0, 2000)
+                    shift <- p*min(y)
+                    ys <- y - shift
                     m <- mean(ys)
-                    c(mean = mean(ys), shape = 1 / mean(1/ys - 1/m), s = s)
+                    c(mean = mean(ys), shape = 1 / mean(1/ys - 1/m), shift = shift)
                     },  
                   # shift range!
                   "exwald" = {

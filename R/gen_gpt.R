@@ -1,7 +1,7 @@
 
 #' Generate Single Data Set
 #' 
-#' @inheritParams fit.gpt
+#' @inheritParams gpt_fit
 #' @param n vector of the length of number of trees with n per tree
 #' @param theta vector of true MPT parameter values (consider also restricted parameters!). Values will be appropriatly reordered if a named vector ist given (otherwise, check order!).
 #' @param eta vector of true continuous parameters. Values will be appropriatly reordered if a named vector ist given (otherwise, check order!).
@@ -15,15 +15,15 @@
 #'          m2_d=30, m2_g=50, s2=5)     # normal distributions
 #' file <- paste0(path.package("gpt"), "/models/2htm_2normal.txt")
 #' 
-#' gen <- gen.gpt(n=n, theta=theta, eta=eta, file=file,
+#' gen <- gpt_gen(n=n, theta=theta, eta=eta, file=file,
 #'               latent=c("normal", "normal"), restrictions=list("do=dn"))
 #' head(gen) 
 #' # check means of latent continuous distributions:
 #' tapply(gen$y.1, gen$state, mean)
 #' 
-#' @seealso gen.gpt.sample
+#' @seealso \code{\link{gpt_gen_sample}}
 #' @export
-gen.gpt <- function(n, theta, eta, file, latent, restrictions=NULL){
+gpt_gen <- function(n, theta, eta, file, latent, restrictions=NULL){
   
   # build S4 model:
   gpt <- new("gpt", file = file, latent=latent, 

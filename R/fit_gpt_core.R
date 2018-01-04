@@ -2,17 +2,19 @@
 #### Fitting a single data set
 
 # x: vector of category numbers (!)
-fit.gpt.core <- function( x, y, gpt, 
+gpt_fit.core <- function( x, y, gpt, 
                           baseline = FALSE, starting.values=NULL, 
-                          # eta.lower=0.01,   eta.upper=Inf, 
+                          eta.lower=0.01,   eta.upper=Inf,
                           n.fit=c(6,2), maxit=c(500, 1000), EM.tol=.001, print = FALSE){
   
   
-  fit.EM <- fit.EM(gpt, x, y, starting.values=starting.values, 
+  fit.EM <- fit.EM(gpt, x, y, 
+                   starting.values=starting.values, eta.lower=eta.lower, eta.upper=eta.upper,
                    n.fit=n.fit[1], maxit=maxit[1], tol=EM.tol, print=print)
   
   if (n.fit[2] > 0){
-    fit.grad <- fit.grad(gpt, x, y, starting.values=fit.EM$par, 
+    fit.grad <- fit.grad(gpt, x, y, 
+                         starting.values=fit.EM$par, eta.lower=eta.lower, eta.upper=eta.upper,
                          n.fit=n.fit[2], maxit=maxit[2], print=print)
     # try({
     if (is.character(all.equal(fit.EM$par[gpt@theta], fit.grad$par[gpt@theta], tolerance=.05)))
@@ -32,7 +34,7 @@ fit.gpt.core <- function( x, y, gpt,
     if (print) cat("\nFitting baseline models ...")
     
     mod.sat <- model.sat(gpt)
-    fit.sat <- fit.gpt.core(x=x,y=y,  gpt=mod.sat, 
+    fit.sat <- gpt_fit.core(x=x,y=y,  gpt=mod.sat, eta.lower=eta.lower, eta.upper=eta.upper,
                             n.fit=n.fit, EM.tol=EM.tol, 
                             maxit=maxit, print = print, baseline=FALSE)
     df.sat <- length(fit.EM$par) - length(fit.sat$fit.EM$par) 
@@ -40,7 +42,7 @@ fit.gpt.core <- function( x, y, gpt,
     
     
     mod.null <- model.null(gpt)
-    fit.null <- fit.gpt.core(x=x,y=y,  gpt=mod.null, 
+    fit.null <- gpt_fit.core(x=x,y=y,  gpt=mod.null, eta.lower=eta.lower, eta.upper=eta.upper,
                              n.fit=n.fit, EM.tol=EM.tol, 
                              maxit=maxit, print = print, baseline=FALSE)
     df.null <- length(fit.EM$par) - length(fit.null$fit.EM$par)

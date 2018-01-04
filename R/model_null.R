@@ -25,7 +25,7 @@ setMethod("model.null",
             gpt.null@mpt <- model.sat(model@mpt)
             
             # saturated continuous structure:
-            gpt.null@map.vec <- as.integer(rep(1, CC))
+            gpt.null@map <- as.integer(rep(1, CC))
             gpt.null@theta <- names(gpt.null@mpt@theta)
             gpt.null@const <- numeric()
             

@@ -3,24 +3,32 @@
 #' 
 #' Either estimated parameters (single data set) or summary of estimates (if model was fitted for a sample of participants using \code{group})
 #' 
-#' @param x fitted model of \code{\link{fit.gpt}}
+#' @param x fitted model of \code{\link{gpt_fit}}
 #' @param ci probability for confidence interval 
 #' @param digits number of digits to be printed
+#' @param EM  whether to use parameter estimates and likelihood from
+#'     expectation-maximization (EM) fit or from the gradient-based optimization
 #' @param ... ignored
 #' 
-#' @method print gpt.fit   
+#' @method print gpt_fit   
 #' @export
-print.gpt.fit <- function(x, ci=.95, digits=3,...){
+print.gpt_fit <- function(x, ci=.95, digits=3, EM = FALSE, ...){
   # single fit
   if(is.null(x$data$group)){
     zz <- qnorm(1- (1- ci)/2)
-    tab <- cbind(
-      # Estimate.EM=x$fit.EM$par, 
-      Estimate=x$fit.grad$par, 
-      # SE=x$fit.EM$SE, 
-      SE=x$fit.grad$SE,
-      CI.lower=x$fit.grad$par - zz*x$fit.grad$SE,
-      CI.upper=x$fit.grad$par + zz*x$fit.grad$SE)
+    if (EM) 
+      tab <- cbind(
+        Estimate=x$fit.EM$par, 
+        SE=x$fit.EM$SE,
+        CI.lower=x$fit.EM$par - zz*x$fit.EM$SE,
+        CI.upper=x$fit.EM$par + zz*x$fit.EM$SE)
+    else 
+      tab <- cbind(
+        Estimate=x$fit.grad$par, 
+        SE=x$fit.grad$SE,
+        CI.lower=x$fit.grad$par - zz*x$fit.grad$SE,
+        CI.upper=x$fit.grad$par + zz*x$fit.grad$SE)
+    
     print(round(tab, digits))
   }else{
     # individual estimates

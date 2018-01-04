@@ -2,17 +2,18 @@
 #' @importFrom numDeriv hessian
 #' @importFrom stats optim
 fit.EM <- function(gpt, x, y, starting.values=NULL, 
-                   # eta.bound.list=NULL, 
+                   eta.lower=NULL, eta.upper=NULL,
                    n.fit=5, maxit=100, tol=.001, print = FALSE){
   
   mpt <- gpt@mpt
   P1 <- length(gpt@theta)
   P2 <- length(gpt@eta)
-  eta.lower <- get.eta.lower(gpt)
-  eta.upper <- get.eta.upper(gpt)
+  # eta.lower <- get.eta.lower(gpt)
+  # eta.upper <- get.eta.upper(gpt)
+  eta.lower <- get.eta.bound(gpt, lower = TRUE,  user.defined = eta.lower, warning = TRUE)
+  eta.upper <- get.eta.bound(gpt, lower = FALSE, user.defined = eta.upper)
   
-  starting.values <- check.input.par(par = starting.values, 
-                                     names = c(gpt@theta, gpt@eta))
+  starting.values <- check.input.par(par = starting.values, names = c(gpt@theta, gpt@eta))
   
   loglik <- iters <- rep(NA, n.fit)  
   par.mat <- matrix(NA, n.fit, P1 + P2)
@@ -29,9 +30,9 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
       par <- starting.values # user-provided starting values
     } else {
       # guess starting values
-      par <- starting.values <- guess.start(distr = gpt, y = y)
+      par <- starting.values <- guess.start(distr = gpt, y = y)[c(gpt@theta, gpt@eta)]
     }
-
+    
     ###################################################### 
     ## EM algorithm (Dempster, Laird, & Rubin, 1977; Hu & Batchelder, 1994)
     ######################################################
@@ -53,6 +54,7 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
       E.prob <- t(tmp) / colSums(tmp)
       
       if (cnt.iter > 11 && P2 > 0){
+        eta.repar <- sapply(gpt@eta.repar, function(e) eval(parse(text = e), as.list(eta)))
         
         # probability for continuous response y for all S latent states
         S <- length(gpt@distr)
@@ -60,19 +62,19 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
         if (ncol(y) > 1){
           for (s in 1:S){
             # only compute density for states with nonzero probability:
-            select.rows <- rowSums(E.prob[x,][,gpt@map.vec == s,drop=FALSE]) != 0
+            select.rows <- rowSums(E.prob[x,][,gpt@map == s,drop=FALSE]) != 0
             lik.base[select.rows,s]  <-  d.multi(y = y[select.rows,,drop=FALSE], 
                                                  distr=gpt@distr[[s]], 
-                                                 eta = eta, 
+                                                 eta = eta.repar, 
                                                  const = gpt@const, log=FALSE)
           } 
         } else {
           lik.base  <- matrix(sapply(sapply(gpt@distr, "[[", "cont1"), dens, 
-                                     y = c(y), eta=eta, const=gpt@const, log=FALSE), 
+                                     y = c(y), eta=eta.repar, const=gpt@const, log=FALSE), 
                               nrow(y))
           
         }
-        lik.branch <- lik.base[,gpt@map.vec]
+        lik.branch <- lik.base[,gpt@map]
         
         # unobserved, complete data: state indicators (each row sums up to one)
         Z.tmp <- E.prob[x,]  * lik.branch
@@ -102,11 +104,11 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
         try ({
           res <- optim(eta, f.complete, method="L-BFGS-B", 
                        lower=eta.lower, upper=eta.upper,
-                       control=list(fnscale=-1, maxit=200,  
-                                    parscale = starting.values[P1 + 1:P2]), 
+                       control=list(fnscale=-1, maxit=200),  # issue with start=0: parscale = starting.values[P1 + 1:P2]
                        y=y, gpt=gpt, Z=Z)
           success <- TRUE
-        }, silent = TRUE)
+        }, silent = FALSE)
+        # f.complete(eta, y=y, gpt=gpt, Z=Z)
         
         if(success){
           par[P1+1:P2] <- res$par
@@ -130,8 +132,8 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
   ll.idx <- which.max(loglik)
   if (length(ll.idx) == 0){
     ll <- NA
-  } else if (max(abs(outer(loglik,loglik, "-"))) > 5 * tol){
-    warning("Log-likelihood differed by more than ", 5 * tol, " across EM runs:\n  ",
+  } else if (max(abs(outer(loglik,loglik, "-"))) > 20 * tol){
+    warning("Log-likelihood differed by more than ", 20 * tol, " across EM runs:\n  ",
             paste(round(loglik, 2), collapse = ", "))
   }
   ll <- loglik[ll.idx]

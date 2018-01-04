@@ -1,16 +1,20 @@
-
 #' Read GPT Object from File
 #' 
 #' Returns a \code{gpt} object and checks model file and parameter restrictions
 #' 
 #' @param file path to model file
-#' @param latent type of latent continuous distribution(s) (e.g., \code{"normal"}, \code{"gamma"}, \code{"exgauss"}, etc.). See \code{\link{fit.gpt}} for details 
+#' @param latent type of latent continuous distribution(s) 
+#'     (e.g., \code{"normal"}, \code{"gamma"}, \code{"exgauss"}, etc.). 
+#'     See \code{\link{gpt_fit}} for details 
 #' @param restrictions list of restrictions for MPT and continuous parameters, e.g., \code{list("g=.5", "do=dn", "mu1=mu2=mu3")}
 #' @details The model file should have one line per MPT branch, with entries separated by semicolons in the following order:
 #' 
 #' \code{Tree; Category; MPT equations;  Continuous Parameters 1;  Cont. Parameters 2}
 #' 
-#' In the model file, the latent distributions are specified by parameters corresponding to the distribution of each processing branch (separated by commas). The definition of the parameters is listed in \code{\link{fit.gpt}}. As an example for \code{latent=c("normal","normal")}:
+#' In the model file, the latent distributions are specified by parameters 
+#' corresponding to the distribution of each processing branch (separated by commas).
+#' The definition of the parameters is listed in \code{\link{gpt_fit}}. 
+#' An example for \code{latent=c("normal","normal")} is:
 #' 
 #' \tabular{lllll}{
 #' \code{#tree} \tab \code{; cat} \tab \code{; mpt} \tab \code{; normal 1}\cr\tab \code{; normal 2}\cr
@@ -23,15 +27,15 @@
 #' }
 #' @examples
 #' file <- paste0(path.package("gpt"), "/models/2htm_2normal.txt")
-#' read.gpt(file=file, latent=c("normal", "normal"))
+#' read_gpt(file=file, latent=c("normal", "normal"))
 #' # with restrictions:
-#' read.gpt(file=file, latent=c("normal", "normal"),
+#' read_gpt(file=file, latent=c("normal", "normal"),
 #'          restrictions=list("g=.5","s1=s2=1", "m1_g=m1_d"))
 #'              
 #' # list of example model files:
 #' list.files(path = paste0(path.package("gpt"),"/models"))
 #' @export
-read.gpt <- function(file, latent, restrictions = NULL){
+read_gpt <- function(file, latent, restrictions = NULL){
   gpt <- new("gpt", file, latent, restrictions)
   gpt
 }

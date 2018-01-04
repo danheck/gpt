@@ -1,7 +1,7 @@
 context("Data generation and fitting for GPT models")
 
 
-test_that("gen.gpt generates valid GPT data", {
+test_that("gpt_gen generates valid GPT data", {
   
   ############# 1D exGaussian 
   n <- c(targets=300, lures=300)
@@ -11,7 +11,7 @@ test_that("gen.gpt generates valid GPT data", {
            lambda_dn=300)   
   
   file <- paste0(path.package("gpt"), "/models/2htm_exgauss.txt")
-  gen <- gen.gpt(n=n, theta=theta, eta=eta, latent="exgauss", file=file)
+  gen <- gpt_gen(n=n, theta=theta, eta=eta, latent="exgauss", file=file)
   
   expect_s3_class(gen, "data.frame")
   expect_identical(names(gen), c("tree","x","y","state"))
@@ -28,7 +28,7 @@ test_that("gen.gpt generates valid GPT data", {
   eta <- c(m1_d=100, m1_g=120, s1=20, 
            m2_d=.4, m2_g=.6, s2=.1)   
   file <- paste0(path.package("gpt"), "/models/2htm_2normal.txt")
-  gen <- gen.gpt(n=n, theta=theta, eta=eta, 
+  gen <- gpt_gen(n=n, theta=theta, eta=eta, 
                  latent=c("normal","normal"), file=file)
   
   expect_s3_class(gen, "data.frame")
@@ -44,7 +44,7 @@ test_that("gen.gpt generates valid GPT data", {
 })
 
 
-test_that("fit.gpt recovers true exGaussian parameters in 2HTM", {
+test_that("gpt_fit recovers true exGaussian parameters in 2HTM", {
   
   
   n <- c(targets=130, lures=130)
@@ -54,8 +54,8 @@ test_that("fit.gpt recovers true exGaussian parameters in 2HTM", {
            lambda_dn=300)   
   
   file <- paste0(path.package("gpt"), "/models/2htm_exgauss.txt")
-  gen <- gen.gpt(n=n, theta=theta, eta=eta, latent="exgauss", file=file)
-  fit <- fit.gpt(x=gen$x, y=gen$y, latent="exgauss", file=file, n.fit = c(1,1),
+  gen <- gpt_gen(n=n, theta=theta, eta=eta, latent="exgauss", file=file)
+  fit <- gpt_fit(x=gen$x, y=gen$y, latent="exgauss", file=file, n.fit = c(1,1),
                  restrictions=list("do=dn", "lambda_do=lambda_dn", 
                                    "lambda_go=lambda_gn"))
   

@@ -3,7 +3,7 @@
 #' 
 #' Computes expected category/branch probabilities and the corresponding conditional means and quantiles/densities for the continuous latent distributions.
 #' 
-#' @param object GPT model fitted by \code{\link{fit.gpt}}
+#' @param object GPT model fitted by \code{\link{gpt_fit}}
 #' @param cat if \code{FALSE} computes expected probabilities and conditional densities for the hidden MPT branches (and not for the observable MPT categories)
 #' @param dens if \code{TRUE}, returns conditional densities (instead of quantiles) for each category/branch
 #' @param group select group by an index, e.g., \code{group=1} (if mutliple groups were fitted)
@@ -20,16 +20,17 @@
 #'          lambda_go=500, lambda_gn=500, 
 #'          lambda_dn=300)          # exGaussian parameters
 #' file <- paste0(path.package("gpt"), "/models/2htm_exgauss.txt")
-#' gen <- gen.gpt(n=n, theta=theta, eta=eta, latent="exgauss", file=file)
+#' gen <- gpt_gen(n=n, theta=theta, eta=eta, latent="exgauss", file=file)
 #' 
 #' # fit GPT
-#' fit <- fit.gpt(x=gen$x, y=gen$y, latent="exgauss", file=file, 
+#' fit <- gpt_fit(x=gen$x, y=gen$y, latent="exgauss", file=file, 
 #'                restrictions=list("do=dn", "lambda_do=lambda_dn", 
 #'                                  "lambda_go=lambda_gn"))
 #'                                  
-#' # Predict MPT categories:
+#' # Predictions for MPT categories:
 #' predict(fit)
-#' # Predict MPT branches:
+#' 
+#' # Predictions for MPT branches:
 #' p <- predict(fit, cat=FALSE, dens=TRUE)
 #' yy <- as.numeric(colnames(p[,-(1:4)]))
 #' plot(yy, p[1,-(1:4)], main="2HTM", type="l")
@@ -37,16 +38,10 @@
 #' legend("topright", col=1:2, lty=1, c("Detect","Guess"))
 #' }
 #' @export
-predict.gpt.fit <- function(object, 
-                            cat = TRUE,
-                            dens = FALSE,
-                            group,
-                            dim = 1, 
-                            quantiles = c(.1,.3,.5,.7,.9), 
-                            prec=500,
-                            ...){
+predict.gpt_fit <- function(object, cat = TRUE, dens = FALSE, group, dim = 1, 
+                            quantiles = c(.1,.3,.5,.7,.9), prec=500, ...){
   
-  object <- subset.gpt.fit(object, group)
+  object <- subset.gpt_fit(object, group = group)
   yy <- matrix(colMeans(object$data$y), 
                prec, ncol(object$data$y), byrow = TRUE)
   yy[,dim] <- seq(min(object$data$y[,dim]), 
@@ -105,7 +100,7 @@ predict.gpt.fit <- function(object,
     }
     
     for(cc in 1:nrow(pred)){
-      br <- object$gpt@map.vec[cc]
+      br <- object$gpt@map[cc]
       dd <- d.multi(y = yy, distr = object$gpt@distr[[br]],   # [dim]
                     eta = eta, const = object$gpt@const, log = FALSE)
       pp <- sum(dd)

@@ -1,16 +1,24 @@
-gpt 0.5.0 (November 2017)
+gpt 0.6.0 (January 2018)
+===========
+
+* Option to use different continuous distribution across component distributions via fit.gpt(..., latent="custom")
+* Renamed functions: gpt_fit, gpt_gen, gpt_gen_sample, plot.gpt_fit, hist.gpt_fit, select_gpt, test_nested, test_fit
+* Renamed S3 class to gpt_fit (instead of gpt.fit)
+* New function update.gpt_fit() to fit nested models
+
+
+gpt 0.5.0 (December 2017)
 ===========
 
 * Goodness-of-fit statistics
-* Improved stability
-
+* Improved stability and bug fixes
 
 
 gpt 0.3.0 (August 2016)
 ===========
 
 * testthat routines for unit checks
-* Pedict MPT probability/mean/quantiles/density: predict.gpt.fit (S4 method)
+* Predict MPT probability/mean/quantiles/density: predict.gpt.fit (S4 method)
 * Plot model fit: cdf, qplot
 * Subsetting to plot model fit separately per group
 

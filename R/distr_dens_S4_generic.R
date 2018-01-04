@@ -74,9 +74,11 @@ setMethod("dens", signature(distr = "gpt",
             branch.prob <- mpt.branch.prob(mpt=distr@mpt, theta=theta)
             lik.branch <- t(branch.prob *  t(distr@mpt@reduce))[x,,drop=FALSE]
             
+            eta.repar <- eta.reparameterize(eta, distr)
+            
             # states:
             # for(ss in seq_along(distr@distr)){
-            #   sel.branch <- distr@map.vec == ss
+            #   sel.branch <- distr@map == ss
             #   sel.rows <- rowSums(lik.branch[,sel.branch,drop=FALSE]) != 0
             #   d.cont <- d.multi(y = y[sel.rows,,drop=FALSE],
             #                     distr=distr@distr[[ss]],
@@ -90,25 +92,25 @@ setMethod("dens", signature(distr = "gpt",
                                        # basis distribution densities:
                                        function(s) {
                                          lik.base <- rep(-Inf, N)
-                                         sel.rows <- rowSums(lik.branch[,distr@map.vec == s,drop=FALSE]) != 0
+                                         sel.rows <- rowSums(lik.branch[,distr@map == s,drop=FALSE]) != 0
                                          sel.rows[is.na(sel.rows)] <- TRUE
                                          if(any(sel.rows))
                                            lik.base[sel.rows]  <-  d.multi(y = y[sel.rows,,drop=FALSE],
                                                                            distr=distr@distr[[s]],
-                                                                           eta = eta,
+                                                                           eta = eta.repar,
                                                                            const = distr@const,
                                                                            log=TRUE)
                                          lik.base
                                        }), N)
             } else {
               lik.base <- matrix(sapply(sapply(distr@distr, "[[", "cont1"), 
-                                 dens, y = c(y), eta=eta, const=distr@const, log=TRUE), N)
+                                 dens, y = c(y), eta=eta.repar, const=distr@const, log=TRUE), N)
               # for selected rows:
               # matrix(sapply(seq_along(distr@distr),
               #               # basis distribution densities:
               #               function(s) {
               #                 lik.base <- rep(-Inf, N)
-              #                 sel.rows <- rowSums(lik.branch[,distr@map.vec == s,drop=FALSE]) != 0
+              #                 sel.rows <- rowSums(lik.branch[,distr@map == s,drop=FALSE]) != 0
               #                 sel.rows[is.na(sel.rows)] <- TRUE
               #                 if(any(sel.rows))
               #                   lik.base[sel.rows]  <-  dens(distr@distr[[s]][[1]],
@@ -131,15 +133,15 @@ setMethod("dens", signature(distr = "gpt",
             #                                # t(branch.prob *  t(distr@mpt@reduce))[x,,drop=FALSE], 
             #                                times = 1000)
             
-            lik.branch <- lik.base[,distr@map.vec,drop=FALSE] + log(lik.branch)
+            lik.branch <- lik.base[,distr@map,drop=FALSE] + log(lik.branch)
             ll <- sum(rowLogSumExps(lik.branch))  # = log( exp(branch 1)+...+exp(branch B) )
            
 
-            if(ll == -Inf) 
+            if (is.na(ll) || ll == -Inf) 
               ll <- -1e100
-            if(log){
+            if (log){
               ll
-            }else{
+            } else {
               exp(ll)
             }
           })

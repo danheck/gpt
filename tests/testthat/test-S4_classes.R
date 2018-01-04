@@ -10,33 +10,34 @@ test_that("d.uni S4 class and methods", {
     if(ll %in% c("normal", "beta")){
       eta.idx <- c(1L, 2L)
     }
-    distr <- make.distr(ll, eta.idx, y=1.5) # for shift parameter
+    distr <- gpt:::make.distr(ll, eta.idx, y=1.5) # for shift parameter
     expect_s4_class(distr, "d.uni")
     
-    expect_silent(dens(distr, y=c(-1, 13942), eta=c(1, 1, .1),
-                       const=1, log=TRUE))
-    dd <- dens(distr, y=c(-1, 1), eta=c(1, 1, .1), const=1, log=TRUE)
+    expect_silent(gpt:::dens(distr, y=c(-1, 13942), eta=c(1, 1, .1),
+                             const=1, log=TRUE))
+    dd <- gpt:::dens(distr, y=c(-1, 1), eta=c(1, 1, .1), const=1, log=TRUE)
     if(distr@range[1] == 0)
       expect_equal(dd[1], -Inf)
     
     # random numbers in range
-    if(ll != "gamma")
+    if(ll != "gamma"){
       par <- c(.35,.8,.3)[eta.idx]
-    else
+    }else{
       par <- c(1.5,.3, .3)
+    }
     names(par) <- names(distr@lower)
-    rr <- rand(distr, n=200, eta=par, const=1)
-    distr <- make.distr(ll, eta.idx, y=min(rr)) 
+    rr <- gpt:::rand(distr, n=200, eta=par, const=1)
+    distr <- gpt:::make.distr(ll, eta.idx, y=min(rr)) 
     expect(all(rr >= distr@range[1] & rr <= distr@range[2]), 
            paste0("random numbers not in range (", distr@label,");", 
                   paste0(rr, collapse=",")))
     
     # positive density
-    dd <- dens(distr, y=rr, eta=par, const=1, log=FALSE)
+    dd <- gpt:::dens(distr, y=rr, eta=par, const=1, log=FALSE)
     expect_gt(min(dd), 0)
     
     # guess starting values
-    g <- guess.start(distr, rr)
+    g <- gpt:::guess.start(distr, rr)
     # expect_equal(par, g, tolerance=.8, scale=1)
     
   }

@@ -100,11 +100,11 @@ make.distr <- function(label, eta.idx, y=NULL){
            upper <- c(min = Inf, max = Inf)},
          {dens <-  label
          range <- c(-Inf, Inf)
-         lower <- rep(-Inf, 3)
-         upper <- rep(Inf, 3)
-         warning("Distribution label not recognized.", 
-                 "\n Trying to use  'd", dens, "'  as density and",
-                 "\n 'd", dens, "' for data generation with three parameters.")
+         lower <- rep(-Inf, length(eta.idx))
+         upper <- rep(Inf, length(eta.idx))
+         # warning ("Distribution label not recognized.", 
+         #          "\n Trying to use  'd", dens, "'  as density and",
+         #          "\n 'd", dens, "' for data generation with three parameters.")
          }
   )
   new("d.uni", label=label, dens=dens, eta.idx=eta.idx, 

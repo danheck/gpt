@@ -4,15 +4,15 @@
 #' Allows to simulate parameter heterogeneity. Note that truncated normal distributions are used to ensure that parameters within the specified bounds.
 #' 
 #' @param S sample size (number of participants)
-#' @param theta.sd vector giving the standard deviation of normally distributed MPT parameters across participants (default: homogeneity)
-#' @param eta.sd vector giving the standard deviation of normally distributed continuous parameters across participants (default: homogeneity)
+#' @param theta_sd vector giving the standard deviation of normally distributed MPT parameters across participants (default: homogeneity)
+#' @param eta_sd vector giving the standard deviation of normally distributed continuous parameters across participants (default: homogeneity)
 # @param eta.lower lower bounds for continuos parameters (might lead to a decrease in variance!)
 # @param eta.upper upper bounds for continuous parameters
 #' @param cpu number of cores used for data generation (default: number of cores minus one). alternatively, a parallel cluster initialized by `cl <- parallel::makeCluster(4)` 
-#' @inheritParams fit.gpt
-#' @inheritParams gen.gpt
+#' @inheritParams gpt_fit
+#' @inheritParams gpt_gen
 #' 
-#' @seealso gen.gpt
+#' @seealso gpt_gen
 #' @examples
 #' ###### 2-High-Threshold Model (with fixed guessing) ######
 #' 
@@ -24,8 +24,8 @@
 #'          lambda_dn=300)          # exGaussian parameters
 #' file <- paste0(path.package("gpt"), "/models/2htm_exgauss.txt")
 #' 
-#' gen <- gen.gpt.sample(S=3, n=n, theta=theta, eta=eta, 
-#'                       theta.sd=.1, eta.sd=10,
+#' gen <- gpt_gen_sample(S=3, n=n, theta=theta, eta=eta, 
+#'                       theta_sd=.1, eta_sd=10,
 #'                       file =file, latent="exgauss")
 #' sapply(gen, head, 3) 
 #' # check mean of latent continuous distributions:
@@ -33,9 +33,8 @@
 #' }
 #' @export
 #' @import parallel
-gen.gpt.sample <- function(S, n, theta, eta, theta.sd=0, eta.sd=0, 
-                              file, latent, restrictions=NULL,
-                              cpu){
+gpt_gen_sample <- function(S, n, theta, eta, theta_sd=0, eta_sd=0, 
+                           file, latent, restrictions=NULL, cpu){
   
   # build S4 model:
   gpt <- new("gpt", file=file, latent=latent, 
@@ -45,25 +44,23 @@ gen.gpt.sample <- function(S, n, theta, eta, theta.sd=0, eta.sd=0,
   theta.names <- names(gpt@mpt@theta)[gpt@mpt@theta == -.5]
   theta <- check.input.par(theta, theta.names)
   eta <- check.input.par(eta, gpt@eta)
-  theta.sd <- check.input.par(theta.sd, theta.names)
-  eta.sd <- check.input.par(eta.sd, gpt@eta)
+  theta_sd <- check.input.par(theta_sd, theta.names)
+  eta_sd <- check.input.par(eta_sd, gpt@eta)
   
   
   # generate true values with heterogeneity
-  theta.sample <- gen.pars(S, theta, theta.sd, 
+  theta.sample <- gen.pars(S, theta, theta_sd, 
                            lower = rep(0,length(theta)), 
                            upper = rep(1, length(theta)))
-  eta.sample <- gen.pars(S, eta, eta.sd, 
+  eta.sample <- gen.pars(S, eta, eta_sd, 
                          lower = get.eta.lower(gpt), 
                          upper = get.eta.upper(gpt))
   
   
   # function to generate data for single participant
   gen.i <- function(i){
-    gen <- gen.gpt(n=n, 
-                      theta=theta.sample[i,], 
-                      eta=eta.sample[i,], 
-                      file=file, latent=latent, restrictions=restrictions)
+    gen <- gpt_gen(n=n, theta=theta.sample[i,], eta=eta.sample[i,], 
+                   file=file, latent=latent, restrictions=restrictions)
     data.frame(id = i, gen)
   }
   

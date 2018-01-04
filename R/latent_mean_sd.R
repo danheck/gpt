@@ -3,23 +3,23 @@
 #' Computes summary statistics for basis distributions, conditional on the 
 #' parameter estimates.
 #' 
-#' @param model a fitted GPT model. See \code{\link{fit.gpt}}
-#' @param base optional: a vector with indices for component distributions
+#' @param gpt_fit a fitted GPT model. See \code{\link{gpt_fit}}
+#' @param component optional: a vector with indices for component distributions
 #' @param dim dimension of the continuous variable 
 #' @export
-base_mean_sd <- function(model, base, dim = 1){
+component_mean_sd <- function(gpt_fit, component, dim = 1){
   
-  distr <- model$gpt@distr
-  if (missing(base)) 
-    base <- seq.int(length(distr))
-  B <- length(base)
+  distr <- gpt_fit$gpt@distr
+  if (missing(component)) 
+    component <- seq.int(length(distr))
+  B <- length(component)
   stats <- matrix(NA, B, 2, 
-                  dimnames = list("base" = seq.int(B), 
+                  dimnames = list("component" = seq.int(B), 
                                   "statistic" = c("mean", "sd"))) #, "SE(mean)", "SE(sd)")))
-  eta <- model$fit.grad$par[model$gpt@eta]
+  eta <- gpt_fit$fit.grad$par[gpt_fit$gpt@eta]
   for (i in seq.int(B)){
     # get parameters in branch i
-    stats[i,] <- latent.mean.sd(distr[[i]][[dim]], eta, model$gpt@const)
+    stats[i,] <- latent.mean.sd(distr[[i]][[dim]], eta, gpt_fit$gpt@const)
     
   }
   stats

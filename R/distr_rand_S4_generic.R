@@ -103,13 +103,16 @@ setMethod("rand", signature(distr = "gpt",
             y <- matrix(NA, sum(n), length(gpt@distr[[1]]))
             
             # get states:
-            states <- gpt@map.vec[z]
+            states <- gpt@map[z]
+            
+            # reparameterize eta
+            eta.repar <- eta.reparameterize(eta, gpt)
             
             # sample continuous values based on latent state z
             y.list <- tapply(states, list(factor(states, levels=1:S)), 
                              function(ss){
                                if(!is.null(ss))
-                                 r.multi(length(ss), gpt@distr[[ss[1]]], eta, gpt@const)
+                                 r.multi(length(ss), gpt@distr[[ss[1]]], eta.repar, gpt@const)
                              })
             # correct assignment:
             for(ss in 1:S){

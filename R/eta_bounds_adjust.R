@@ -1,17 +1,14 @@
 
 
-
-
 # adjust eta boundaries after the data are known and checked
-adjust.bounds <- function(gpt, y, 
-                          eta.lower = NULL, eta.upper = NULL){
+adjust.bounds <- function(gpt, y, eta.lower = NULL, eta.upper = NULL){
   
   npar <- length(gpt@eta)
   
-  if(!is.null(eta.lower) && length(eta.lower) == 1){
+  if(!is.null(eta.lower) && length(eta.lower) == 1 && is.null(names(eta.lower))){
     eta.lower <- rep(eta.lower, npar)
   }
-  if(!is.null(eta.upper) && length(eta.upper) == 1){
+  if(!is.null(eta.upper) && length(eta.upper) == 1 && is.null(names(eta.upper))){
     eta.upper <- rep(eta.upper, npar)
   }
   
@@ -19,7 +16,7 @@ adjust.bounds <- function(gpt, y,
   eta.lower <- check.input.par(par = eta.lower, names = gpt@eta)
   eta.upper <- check.input.par(par = eta.upper, names = gpt@eta)
   
-  orderOK <- all(eta.upper <= eta.lower, na.rm = TRUE)
+  orderOK <- all(eta.upper > eta.lower, na.rm = TRUE)
   if(!is.null(eta.lower) && !is.null(eta.upper) && !orderOK)
     stop("some values of eta.lower are larger or equal to those of eta.upper!")
   
