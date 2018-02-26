@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 .RDataTmp
 man-roxygen/*
+README.md
