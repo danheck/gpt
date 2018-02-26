@@ -9,7 +9,7 @@
 #' @method summary gpt_fit
 #' @export
 summary.gpt_fit <- function(object, EM = FALSE, ...){
-  cat("## Parameter estimates:\n")
+  cat("## Parameter estimates (", ifelse(EM, "EM", "optim"),")\n", sep = "")
   print(object, EM = EM)
   
   test <- test_fit(object, ...)

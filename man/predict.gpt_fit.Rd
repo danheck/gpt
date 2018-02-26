@@ -2,7 +2,7 @@
 % Please edit documentation in R/predict_gpt_fit.R
 \name{predict.gpt_fit}
 \alias{predict.gpt_fit}
-\title{Prediction for GPT Models}
+\title{Predictions  for GPT Models}
 \usage{
 \method{predict}{gpt_fit}(object, cat = TRUE, dens = FALSE, group,
   dim = 1, quantiles = c(0.1, 0.3, 0.5, 0.7, 0.9), prec = 500, ...)
@@ -10,7 +10,8 @@
 \arguments{
 \item{object}{GPT model fitted by \code{\link{gpt_fit}}}
 
-\item{cat}{if \code{FALSE} computes expected probabilities and conditional densities for the hidden MPT branches (and not for the observable MPT categories)}
+\item{cat}{if \code{FALSE} computes expected probabilities and conditional 
+densities for the latent MPT branches (and not for the observable MPT categories)}
 
 \item{dens}{if \code{TRUE}, returns conditional densities (instead of quantiles) for each category/branch}
 
@@ -20,12 +21,14 @@
 
 \item{quantiles}{which quantiles to predict}
 
-\item{prec}{number of evaluations of the GPT density to compute conditional means/quantiles for the latent distributions}
+\item{prec}{number of evaluations of the GPT density to compute conditional 
+means/quantiles for the latent distributions}
 
 \item{...}{ignored}
 }
 \description{
-Computes expected category/branch probabilities and the corresponding conditional means and quantiles/densities for the continuous latent distributions.
+Computes expected category/branch probabilities and the corresponding 
+conditional means and quantiles/densities for the continuous latent distributions.
 }
 \examples{
 \dontrun{
@@ -46,11 +49,12 @@ fit <- gpt_fit(x=gen$x, y=gen$y, latent="exgauss", file=file,
 # Predictions for MPT categories:
 predict(fit)
 
-# Predictions for MPT branches:
+# Predictions for latent MPT branches:
 p <- predict(fit, cat=FALSE, dens=TRUE)
-yy <- as.numeric(colnames(p[,-(1:4)]))
-plot(yy, p[1,-(1:4)], main="2HTM", type="l")
-lines(yy, p[3,-(1:4)], col=2)
+yy <- as.numeric(colnames(p[,-(1:5)]))
+plot(yy, p[1,-(1:5)], main="2HTM", type="l")
+lines(yy, p[3,-(1:5)], col=2)
 legend("topright", col=1:2, lty=1, c("Detect","Guess"))
 }
+
 }

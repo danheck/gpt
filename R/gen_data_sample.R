@@ -80,12 +80,11 @@ gpt_gen_sample <- function(S, n, theta, eta, theta_sd=0, eta_sd=0,
     clusterExport(cl, varlist=c("n","theta.sample","eta.sample", 
                                 "latent", "file", "gen.i"),
                   envir =environment())
-    tmp <- clusterEvalQ(cl, library(gpt))
-    data.list <- parSapply(cl, 1:S, gen.i, simplify = FALSE, USE.NAMES = FALSE)
-    if(stop.cl) stopCluster(cl = cl)
+    data.list <- parLapply(cl, 1:S, gen.i)
+    if (stop.cl) stopCluster(cl = cl)
     
   }else{
-    data.list <- sapply(1:S, gen.i, simplify = FALSE, USE.NAMES = FALSE)
+    data.list <- lapply(1:S, gen.i)
   }
   
   data <- do.call("rbind", data.list)

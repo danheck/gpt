@@ -9,7 +9,7 @@ setGeneric("rand", function(distr, n, eta=NULL, theta=NULL, const=NULL) {
 
 # latent continuous basis distributions
 # (returns matrix y)
-setMethod("rand", signature(distr = "d.uni", 
+setMethod("rand", signature(distr = "contin", 
                             n = "numeric", 
                             eta = "numeric",
                             const = "numeric"), 
@@ -112,7 +112,7 @@ setMethod("rand", signature(distr = "gpt",
             y.list <- tapply(states, list(factor(states, levels=1:S)), 
                              function(ss){
                                if(!is.null(ss))
-                                 r.multi(length(ss), gpt@distr[[ss[1]]], eta.repar, gpt@const)
+                                 rmultivar(length(ss), gpt@distr[[ss[1]]], eta.repar, gpt@const)
                              })
             # correct assignment:
             for(ss in 1:S){

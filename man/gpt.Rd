@@ -10,7 +10,7 @@ Fits GPT models for multivariate data (one discrete and one or more continuous r
 Assumes that distribution of continuous variable(s) is a mixture distribution with the MPT core structure defining the mixture probabilities.
 }
 \details{
-The GPT structure is implemented by an S4 class \code{gpt}, which contains the MPT structure (the S4 class \code{mpt}), a vector mapping the MPT branches to the underlying continuous distributions (\code{mapvec}), a list of univariate or multivariate basis distributions (each an S4 class \code{d.uni} with information about parameter spaces etc.), the parameter labels for \code{theta} and \code{eta}, and a vector with constant values for the parameters.
+The GPT structure is implemented by an S4 class \code{gpt}, which contains the MPT structure (the S4 class \code{mpt}), a vector mapping the MPT branches to the underlying continuous distributions (\code{mapvec}), a list of univariate or multivariate basis distributions (each an S4 class \code{contin} with information about parameter spaces etc.), the parameter labels for \code{theta} and \code{eta}, and a vector with constant values for the parameters.
 
 It is advisable to first check that a GPT model file is valid using \code{\link{read_gpt}}. 
 Next, one can either first generate some simulated data using \code{\link{gpt_gen}} 

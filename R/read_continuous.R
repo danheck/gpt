@@ -34,10 +34,10 @@ make.gpt <- function(tab, latent, restrictions = NULL){
     }
   }
   
-  n.cont <- ncol(tab) - 3
+  n.contin <- ncol(tab) - 3
   if (length(latent) == 1 ){
-    latent <- rep(latent, n.cont)
-  } else if (length(latent) != n.cont){
+    latent <- rep(latent, n.contin)
+  } else if (length(latent) != n.contin){
     stop("Number of latent distributions does not match with the model file!")
   }
   
@@ -46,15 +46,15 @@ make.gpt <- function(tab, latent, restrictions = NULL){
   # assign parameters to latent states:
   par.per.lat <- ifelse(latent %in% c("normal", "beta", "mises", "unif"), 2, 
                         ifelse(latent == "custom", 5, 3))
-  sel.cont <- rep(1:length(latent), par.per.lat)
+  sel.contin <- rep(1:length(latent), par.per.lat)
   X.named <- X.full <- matrix(NA, B, ncol=sum(par.per.lat))
-  for(cc in 1:n.cont){
+  for(cc in 1:n.contin){
     parlist <- strsplit(tab[,3+cc], "[,()]")
     for(pp in 1:B){
       if(latent[cc] != "custom" && length(parlist[[pp]]) != par.per.lat[cc])
         stop("Number of parameters in model file (=",length(parlist[[pp]]), ")\n",
              "  does not match number of parameters of 'latent' distribution (=",par.per.lat[cc],").")
-      X.named[pp,sel.cont == cc][seq_along(parlist[[pp]])] <- parlist[[pp]]
+      X.named[pp,sel.contin == cc][seq_along(parlist[[pp]])] <- parlist[[pp]]
     }
   }
   
@@ -62,7 +62,7 @@ make.gpt <- function(tab, latent, restrictions = NULL){
   eta.repar <- sort(na.omit(unique(c(X.named))))
   for(cc in seq_along(latent)){
     if (latent[[cc]] == "custom"){
-      labels <- X.named[,which(sel.cont == cc)[1]]
+      labels <- X.named[,which(sel.contin == cc)[1]]
       eta.names <- setdiff(eta.names, labels)
       eta.repar <- setdiff(eta.repar, labels)
     }
@@ -70,7 +70,7 @@ make.gpt <- function(tab, latent, restrictions = NULL){
   
   X.full <- matrix(match(X.named, eta.repar), B, sum(par.per.lat))
   X.full[is.na(X.full)] <- 0
-  colnames(X.full) <- colnames(X.named) <- sel.cont
+  colnames(X.full) <- colnames(X.named) <- sel.contin
   
   if (any(X.full== 0) && all(latent != "custom"))
     stop (paste("  Check number of latent continuous parameters in model file!",
@@ -94,16 +94,16 @@ make.gpt <- function(tab, latent, restrictions = NULL){
   distr <- vector("list", S)
   names(distr) <- paste0("base", 1:S)
   for(s in 1:S){
-    distr[[s]] <- vector("list", n.cont)
-    names(distr[[s]]) <- paste0("cont", 1:n.cont)
-    for(cc in 1:n.cont){
+    distr[[s]] <- vector("list", n.contin)
+    names(distr[[s]]) <- paste0("contin", 1:n.contin)
+    for(cc in 1:n.contin){
       if (latent[[cc]] == "custom"){
-        idx <- as.integer(X.idx[s, sel.cont == cc])
-        label <- X.unique[s,which(sel.cont == cc)[1]]
+        idx <- as.integer(X.idx[s, sel.contin == cc])
+        label <- X.unique[s,which(sel.contin == cc)[1]]
         distr[[s]][[cc]] <- make.distr(label = label, eta.idx = idx[idx != 0])
       } else {
         distr[[s]][[cc]] <- make.distr(label = latent[cc], 
-                                       eta.idx = as.integer(X.idx[s, sel.cont == cc]))
+                                       eta.idx = as.integer(X.idx[s, sel.contin == cc]))
       }
     }
   }

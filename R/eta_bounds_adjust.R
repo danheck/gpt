@@ -13,8 +13,8 @@ adjust.bounds <- function(gpt, y, eta.lower = NULL, eta.upper = NULL){
   }
   
   # check parameter names etc.
-  eta.lower <- check.input.par(par = eta.lower, names = gpt@eta)
-  eta.upper <- check.input.par(par = eta.upper, names = gpt@eta)
+  eta.lower <- check.input.par(par = eta.lower, names = gpt@eta, replace.NA = -Inf)
+  eta.upper <- check.input.par(par = eta.upper, names = gpt@eta, replace.NA = Inf)
   
   orderOK <- all(eta.upper > eta.lower, na.rm = TRUE)
   if(!is.null(eta.lower) && !is.null(eta.upper) && !orderOK)
@@ -22,8 +22,8 @@ adjust.bounds <- function(gpt, y, eta.lower = NULL, eta.upper = NULL){
   
   
   
-  for(ss in seq_along(gpt@distr)){
-    for(cc in seq_along(gpt@distr[[ss]])){
+  for (ss in seq_along(gpt@distr)){
+    for (cc in seq_along(gpt@distr[[ss]])){
       tmp <- gpt@distr[[ss]][[cc]]
       
       
@@ -32,16 +32,18 @@ adjust.bounds <- function(gpt, y, eta.lower = NULL, eta.upper = NULL){
                                            eta.idx = tmp@eta.idx,
                                            y = y[,cc])
       
+      pars <- gpt@eta.repar[tmp@eta.idx]
+      
       # check whether user-specified bounds are more strict than necessary default boundaries:
-      if(!is.null(eta.lower) && length(eta.lower) > 0){
+      if (!is.null(eta.lower) && length(eta.lower) > 0 && !anyNA(eta.lower[pars])){
         gpt@distr[[ss]][[cc]]@lower <- 
-          pmax(eta.lower[tmp@eta.idx], 
+          pmax(eta.lower[pars], 
                gpt@distr[[ss]][[cc]]@lower, na.rm = TRUE)
       }
       
-      if(!is.null(eta.upper)&& length(eta.upper) > 0){
+      if (!is.null(eta.upper)&& length(eta.upper) > 0 && !anyNA(eta.upper[pars])){
         gpt@distr[[ss]][[cc]]@upper <- 
-          pmin(eta.upper[tmp@eta.idx], 
+          pmin(eta.upper[pars], 
                gpt@distr[[ss]][[cc]]@upper, na.rm = TRUE)
       }
     }

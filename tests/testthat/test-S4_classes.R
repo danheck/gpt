@@ -1,6 +1,7 @@
+library("testthat")
 context("S4 class structure of univariate distributions")
 
-test_that("d.uni S4 class and methods", {
+test_that("'contin' S4 class and methods", {
   
   labels <-  c("normal", "lognormal", "beta", "weibull",
                "gamma", "exgauss", "wald","exwald")
@@ -11,7 +12,7 @@ test_that("d.uni S4 class and methods", {
       eta.idx <- c(1L, 2L)
     }
     distr <- gpt:::make.distr(ll, eta.idx, y=1.5) # for shift parameter
-    expect_s4_class(distr, "d.uni")
+    expect_s4_class(distr, "contin")
     
     expect_silent(gpt:::dens(distr, y=c(-1, 13942), eta=c(1, 1, .1),
                              const=1, log=TRUE))
@@ -51,11 +52,11 @@ test_that("d.uni S4 class and methods", {
 # eta <- rexp(5)
 # const <- 1
 # rand(distr=distr, n=1L, eta=eta, const=const)
-# Y <- r.multi(10, distr, eta, const)
+# Y <- rmultivar(10, distr, eta, const)
 # Y
-# d.multi(Y, distr, eta, const, log=TRUE)
+# dmultivar(Y, distr, eta, const, log=TRUE)
 # 
-# d.multi((Y[,1]), distr[1], eta, const, log=TRUE)
+# dmultivar((Y[,1]), distr[1], eta, const, log=TRUE)
 # 
 # 
 # 

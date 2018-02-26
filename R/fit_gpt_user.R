@@ -133,10 +133,11 @@ gpt_fit <- function(x, y, data, file, latent,
   res <- c(fit, 
            list(data = list(x=x, y=y, group=group),
                 gpt=gpt,
-                input = list(file=file, latent=latent, restrictions=restrictions)))
+                input = list(file=file, latent=latent, restrictions=restrictions,
+                             eta.lower = eta.lower, eta.upper = eta.upper)))
   
   class(res) <- "gpt_fit"
-  return(res)
+  res
 }
 
 

@@ -1,51 +1,37 @@
+# multivariate product-distributions for latent densities 
 
-# product-distributions for latent densities 
-
-# Y: matrix with dimensions N x n.cont
-# latent: list with univariate distributions (S4 class "d.uni")
+# Y: matrix with dimensions N x n.contin
+# latent: list with univariate distributions (S4 class "contin")
 # eta: unnamed (!) vector of parameter values
 # const: named vector of parameter values
 # @importFrom mvtnorm dmvnorm  ##  vcov=NULL, 
 
-d.multi <- function(y, distr, eta, const, log = TRUE){
-  
-  lik <- mapply(dens, distr=distr, y=data.frame(y),
-                MoreArgs = list(eta=eta, const=const, log=log), 
+dmultivar <- function(y, distr, eta, const, log = TRUE){
+  # check: dens(distr[[1]], y = c(y), eta = eta, const = const)
+  lik <- mapply(dens, distr = distr, y = data.frame(y),
+                MoreArgs = list(eta = eta, const = const, log=TRUE), 
                 SIMPLIFY = FALSE)
-  lik <- do.call("cbind", lik)
-  # if(nrow(y) == 1)
-  #   lik <- matrix(lik, 1)
   
-  # product distributions: multiply likelihood!
-  if (log){
-    ll <- rowSums(lik)
-  } else {
-    ll <- apply(lik, 1, prod)
-  }
+  # independent/product distributions: multiply density / sum of log-density
+  ll <- rowSums(do.call("cbind", lik))
+  if (!log) ll <- exp(ll)
   ll
 }
 
-# generate multivariate data:
-r.multi <- function(n, distr, eta, const){
-  Y <- mapply(rand, distr=distr, 
-              MoreArgs = list(n=as.integer(n), eta=eta, const=const))
-  Y
+# random generation
+rmultivar <- function(n, distr, eta, const){
+  y <- mapply(rand, distr=distr, 
+              MoreArgs = list(n=as.integer(n), eta=eta, const=const),
+              SIMPLIFY = FALSE)
+  do.call("cbind", y)
 }
 
-p.multi <- function(y, distr, eta, const, log.p = TRUE){
-  
-  lik <- mapply(cdf, distr=distr, y=data.frame(y),
-                MoreArgs = list(eta=eta, const=const, log.p = log.p), 
+pmultivar <- function(y, distr, eta, const, log.p = TRUE){
+  lik <- mapply(cdf, distr = distr, y = data.frame(y),
+                MoreArgs = list(eta=eta, const=const, log.p = TRUE), 
                 SIMPLIFY = FALSE)
-  lik <- do.call("cbind", lik)
-  # if (nrow(y) == 1)
-  #   lik <- matrix(lik, 1)
-  
-  # product distributions: multiply likelihood!
-  if (log.p){
-    ll <- rowSums(lik)
-  } else {
-    ll <- apply(lik, 1, prod)
-  }
+  ll <- rowSums(do.call("cbind", lik))
+  # independent/product distributions: multiply cdf / sum of log-cdf
+  if (log.p) ll <- exp(ll)
   ll
 }

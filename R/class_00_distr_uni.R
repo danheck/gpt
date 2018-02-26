@@ -1,4 +1,4 @@
-setClass("d.uni", 
+setClass("contin", 
          representation(label = "character", 
                         dens = "character",
                         eta.idx = "integer",
@@ -107,7 +107,7 @@ make.distr <- function(label, eta.idx, y=NULL){
          #          "\n 'd", dens, "' for data generation with three parameters.")
          }
   )
-  new("d.uni", label=label, dens=dens, eta.idx=eta.idx, 
+  new("contin", label=label, dens=dens, eta.idx=eta.idx, 
       range=range, lower=lower, upper=upper)
 }
 

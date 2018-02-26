@@ -63,13 +63,13 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
           for (s in 1:S){
             # only compute density for states with nonzero probability:
             select.rows <- rowSums(E.prob[x,][,gpt@map == s,drop=FALSE]) != 0
-            lik.base[select.rows,s]  <-  d.multi(y = y[select.rows,,drop=FALSE], 
-                                                 distr=gpt@distr[[s]], 
-                                                 eta = eta.repar, 
-                                                 const = gpt@const, log=FALSE)
+            lik.base[select.rows,s]  <-  dmultivar(y = y[select.rows,,drop=FALSE], 
+                                                   distr=gpt@distr[[s]], 
+                                                   eta = eta.repar, 
+                                                   const = gpt@const, log=FALSE)
           } 
         } else {
-          lik.base  <- matrix(sapply(sapply(gpt@distr, "[[", "cont1"), dens, 
+          lik.base  <- matrix(sapply(sapply(gpt@distr, "[[", "contin1"), dens, 
                                      y = c(y), eta=eta.repar, const=gpt@const, log=FALSE), 
                               nrow(y))
           

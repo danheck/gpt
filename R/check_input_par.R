@@ -1,4 +1,4 @@
-check.input.par <- function(par, names){
+check.input.par <- function(par, names, replace.NA = NA){
   
   if (is.null(par) || length(par) == 0){
     return(numeric())
@@ -33,6 +33,8 @@ check.input.par <- function(par, names){
   # if (anyNA(par))
   #   warning("Some parameters 'eta' are not defined/named explicitly.\n",
   #           "  Check starting values / eta.lower / eta.upper.")
+  
+  par[is.na(par)] <- replace.NA
   
   par
 }

@@ -1,14 +1,12 @@
-
-
-######################## DENSITY
+######################## S4 class for densities
 
 setGeneric("dens", 
            function(distr, x, y, theta, eta, const, log=FALSE) {
-  standardGeneric("dens")
-})
+             standardGeneric("dens")
+           })
 
-# univariate latent densities:
-setMethod("dens", signature(distr = "d.uni", 
+# univariate densities (for latent components):
+setMethod("dens", signature(distr = "contin", 
                             y="numeric", 
                             eta="numeric",
                             const = "numeric",
@@ -41,7 +39,7 @@ setMethod("dens", signature(distr = "mpt",
             
             # category probabilities:
             cat.prob <- mpt.cat.prob(mpt=distr, theta=theta)
-
+            
             # observed frequencies and sample size per tree:
             freq <- as.vector(table(factor(x, levels=1:length(distr@tree.idx))))
             n <- tapply(freq, distr@tree.idx, sum)
@@ -69,7 +67,7 @@ setMethod("dens", signature(distr = "gpt",
             
             # browser()
             N <- length(x)
-
+            
             # MPT structure:
             branch.prob <- mpt.branch.prob(mpt=distr@mpt, theta=theta)
             lik.branch <- t(branch.prob *  t(distr@mpt@reduce))[x,,drop=FALSE]
@@ -80,31 +78,31 @@ setMethod("dens", signature(distr = "gpt",
             # for(ss in seq_along(distr@distr)){
             #   sel.branch <- distr@map == ss
             #   sel.rows <- rowSums(lik.branch[,sel.branch,drop=FALSE]) != 0
-            #   d.cont <- d.multi(y = y[sel.rows,,drop=FALSE],
+            #   d.contin <- dmultivar(y = y[sel.rows,,drop=FALSE],
             #                     distr=distr@distr[[ss]],
             #                     eta = eta, const = distr@const, log=FALSE)
-            #   lik.branch[sel.rows, sel.branch] <- lik.branch[sel.rows, sel.branch] * d.cont
+            #   lik.branch[sel.rows, sel.branch] <- lik.branch[sel.rows, sel.branch] * d.contin
             # }
             # browser()
             # only for relevant rows (improved)
             if (ncol(y) > 1){
-            lik.base <-  matrix(sapply(seq_along(distr@distr),
-                                       # basis distribution densities:
-                                       function(s) {
-                                         lik.base <- rep(-Inf, N)
-                                         sel.rows <- rowSums(lik.branch[,distr@map == s,drop=FALSE]) != 0
-                                         sel.rows[is.na(sel.rows)] <- TRUE
-                                         if(any(sel.rows))
-                                           lik.base[sel.rows]  <-  d.multi(y = y[sel.rows,,drop=FALSE],
-                                                                           distr=distr@distr[[s]],
-                                                                           eta = eta.repar,
-                                                                           const = distr@const,
-                                                                           log=TRUE)
-                                         lik.base
-                                       }), N)
+              lik.base <-  matrix(sapply(seq_along(distr@distr),
+                                         # basis distribution densities:
+                                         function(s) {
+                                           lik.base <- rep(-Inf, N)
+                                           sel.rows <- rowSums(lik.branch[,distr@map == s,drop=FALSE]) != 0
+                                           sel.rows[is.na(sel.rows)] <- TRUE
+                                           if(any(sel.rows))
+                                             lik.base[sel.rows]  <-  dmultivar(y = y[sel.rows,,drop=FALSE],
+                                                                               distr=distr@distr[[s]],
+                                                                               eta = eta.repar,
+                                                                               const = distr@const,
+                                                                               log=TRUE)
+                                           lik.base
+                                         }), N)
             } else {
-              lik.base <- matrix(sapply(sapply(distr@distr, "[[", "cont1"), 
-                                 dens, y = c(y), eta=eta.repar, const=distr@const, log=TRUE), N)
+              lik.base <- matrix(sapply(sapply(distr@distr, "[[", "contin1"), 
+                                        dens, y = c(y), eta=eta.repar, const=distr@const, log=TRUE), N)
               # for selected rows:
               # matrix(sapply(seq_along(distr@distr),
               #               # basis distribution densities:
@@ -123,7 +121,7 @@ setMethod("dens", signature(distr = "gpt",
             }
             # for all rows: slightly faster for few branches
             # lik.base <- matrix(sapply(seq_along(distr@distr), 
-            #                    function(s)  d.multi(y = y,
+            #                    function(s)  dmultivar(y = y,
             #                                         distr=distr@distr[[s]],
             #                                         eta = eta,
             #                                         const = distr@const, 
@@ -134,15 +132,10 @@ setMethod("dens", signature(distr = "gpt",
             #                                times = 1000)
             
             lik.branch <- lik.base[,distr@map,drop=FALSE] + log(lik.branch)
-            ll <- sum(rowLogSumExps(lik.branch))  # = log( exp(branch 1)+...+exp(branch B) )
-           
-
-            if (is.na(ll) || ll == -Inf) 
-              ll <- -1e100
-            if (log){
-              ll
-            } else {
-              exp(ll)
-            }
+            ll <- rowLogSumExps(lik.branch)  # = log( exp(branch_1)+...+exp(branch_B) )
+            
+            ll[is.na(ll) | ll == -Inf] <- -1e100
+            if (!log) ll <- exp(ll)
+            ll
           })
-              
+

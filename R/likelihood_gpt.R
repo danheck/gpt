@@ -15,11 +15,11 @@ f.complete <- function(eta, gpt, y, Z){
                         # relevant rows:
                         sel.rows <- rowSums(Z[,gpt@map == s,drop=FALSE]) != 0
                         sel.rows[is.na(sel.rows)] <- TRUE
-                        lik.base[sel.rows]  <-  d.multi(y = y[sel.rows,,drop=FALSE],
-                                                        distr=gpt@distr[[s]],
-                                                        eta = eta.repar,
-                                                        const = gpt@const, 
-                                                        log=TRUE)
+                        lik.base[sel.rows]  <-  dmultivar(y = y[sel.rows,,drop=FALSE],
+                                                          distr = gpt@distr[[s]],
+                                                          eta = eta.repar,
+                                                          const = gpt@const, 
+                                                          log=TRUE)
                         lik.base
                       })
   
@@ -37,10 +37,12 @@ f.complete <- function(eta, gpt, y, Z){
 # log-likelihood of gpt model (wrapper for hessian and optim)
 gpt.ll <- function (par, gpt, yy, xx){
   P1 <- length(gpt@theta)
+  P2 <- length(gpt@eta)
   
-  # reparameterization of eta: in "dens()"
-  dens(distr=gpt, x=xx, y=yy, theta=par[1:P1], 
-       eta = par[(P1+1):length(par)], log=TRUE)
+  # reparameterization of eta: happens in "dens()"
+  sum(dens(distr = gpt, x = xx, y = yy, 
+           theta = par[seq.int(P1)], 
+           eta = par[P1 + seq.int(P2)], log = TRUE))
 }
 
 

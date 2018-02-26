@@ -16,6 +16,7 @@ hist.gpt_fit <- function(x, dim=1, freq = "cat", # group = 1,
   mfrow <- par()$mfrow
   mar <- par()$mar
   
+  group <- 1
   if (!is.null(x$group)){
     stop ("group not implemented")
   } else {
@@ -31,9 +32,9 @@ hist.gpt_fit <- function(x, dim=1, freq = "cat", # group = 1,
                             levels = seq_along(x$gpt@mpt@cat.names),
                             labels = x$gpt@mpt@cat.names))
   # N.per.tree <- x$gpt
-  miny <- min(data$y)-1
-  maxy <- max(data$y)+1
-  pred <- predict(x, dens = TRUE, group=1)
+  miny <- min(data$y) #-1
+  maxy <- max(data$y) #+1
+  pred <- predict(x, dens = TRUE, group = 1)
   
   yy <- as.numeric(colnames(pred[,-(1:4)]))
   scale <- diff(yy[1:2])
@@ -54,7 +55,7 @@ hist.gpt_fit <- function(x, dim=1, freq = "cat", # group = 1,
     # hh <- hist(data$y[sel], plot = FALSE, args = dots#,
                # breaks=seq(miny,maxy,length=min(25,floor(N/(J*2))))
                # )
-    hh <- do.call(hist, args = c(list(x = data$y[sel], plot = FALSE), dots))
+    hh <- do.call("hist", args = c(list(x = data$y[sel], plot = FALSE), dots))
     
     ############ Normalization
     dd <- unlist(pred[cc,-c(1:4)])# *scale #/pred[cc,"prob"]
@@ -78,7 +79,7 @@ hist.gpt_fit <- function(x, dim=1, freq = "cat", # group = 1,
     plot.args$ylab <- yylab
     plot.args$main <- cat.names[cc] 
     plot.args$ylim <- range(0, dd, hh$counts)
-    do.call(plot, args = plot.args)
+    do.call("plot", args = plot.args)
     # plot(hh,  col="gray", border = "gray", main=cat.names[cc], xlab=xlab, 
     #      ylim=range(0, dd, hh$counts),
     #      ylab = yylab, las = 1, ...)

@@ -8,7 +8,7 @@ setGeneric("cdf",
            })
 
 # univariate latent CDF:
-setMethod("cdf", signature(distr = "d.uni", 
+setMethod("cdf", signature(distr = "contin", 
                            y="numeric", 
                            eta="numeric",
                            const = "numeric",
@@ -53,23 +53,20 @@ setMethod("cdf", signature(distr = "gpt",
                                            sel.rows <- rowSums(lik.branch[,distr@map == s,drop=FALSE]) != 0
                                            sel.rows[is.na(sel.rows)] <- TRUE
                                            if(any(sel.rows))
-                                             lik.base[sel.rows]  <-  p.multi(y = y[sel.rows,,drop=FALSE],
-                                                                             distr=distr@distr[[s]],
-                                                                             eta = eta.repar,
-                                                                             const = distr@const,
-                                                                             log.p = TRUE)
+                                             lik.base[sel.rows]  <-  pmultivar(y = y[sel.rows,,drop=FALSE],
+                                                                               distr=distr@distr[[s]],
+                                                                               eta = eta.repar,
+                                                                               const = distr@const,
+                                                                               log.p = TRUE)
                                            lik.base
                                          }), N)
             } else {
-              lik.base <- matrix(sapply(sapply(distr@distr, "[[", "cont1"), 
+              lik.base <- matrix(sapply(sapply(distr@distr, "[[", "contin1"), 
                                         cdf, y = c(y), eta=eta.repar, const=distr@const, log.p=TRUE), N)
             }
             lik.branch <- lik.base[,distr@map, drop=FALSE] + log(lik.branch)
             ll <- rowLogSumExps(lik.branch)  # = log( exp(branch 1)+...+exp(branch B) )
-            ll[ll == -Inf] <- -1e100
-            if (log.p){
-              ll
-            }else{
-              exp(ll)
-            }
+            ll[ll == -Inf | is.na(ll)] <- -1e100
+            if (!log.p) ll <- exp(ll)
+            ll
           })

@@ -2,10 +2,10 @@
 #### Fitting a single data set
 
 # x: vector of category numbers (!)
-gpt_fit.core <- function( x, y, gpt, 
-                          baseline = FALSE, starting.values=NULL, 
-                          eta.lower=0.01,   eta.upper=Inf,
-                          n.fit=c(6,2), maxit=c(500, 1000), EM.tol=.001, print = FALSE){
+gpt_fit.core <- function(x, y, gpt, 
+                         baseline = FALSE, starting.values=NULL, 
+                         eta.lower=0.01,   eta.upper=Inf,
+                         n.fit=c(6,2), maxit=c(500, 1000), EM.tol=.001, print = FALSE){
   
   
   fit.EM <- fit.EM(gpt, x, y, 

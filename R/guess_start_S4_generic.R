@@ -7,7 +7,7 @@ setGeneric("guess.start",
 
 
 # guess starting values for a single univariate distribution:
-setMethod("guess.start", signature(distr = "d.uni", 
+setMethod("guess.start", signature(distr = "contin", 
                                    y = "numeric"), 
           function(distr, y) {
             qq <- quantile(y, c(.05, .95))
@@ -29,8 +29,7 @@ setMethod("guess.start", signature(distr = "d.uni",
               suppressWarnings(
                 ll <- sum(dens(distr=dd, y=y, eta = par, const=NA_real_, log=TRUE))
               )
-              if(is.na(ll) || ll == -Inf)
-                ll <- -1e20
+              if(is.na(ll) || ll == -Inf) ll <- -1e20
               ll
             }
 
