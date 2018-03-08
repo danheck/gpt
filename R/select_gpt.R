@@ -10,6 +10,8 @@
 select_gpt <- function (..., gpt_fits = list()){
   
   gpt_fits <- c(list(...),  gpt_fits)
+  pars <- sapply(gpt_fits, function(g) length(g$fit.EM$par))
+
   MM <- length(gpt_fits)
   tab <- data.frame("Model" = 1:MM)
   
@@ -36,9 +38,9 @@ select_gpt <- function (..., gpt_fits = list()){
   tab$wBIC <- with(tab, exp(-.5*delta.BIC)/sum(exp(-.5*delta.BIC)))
   
   
-  if(is.null(names(gpt_fits))){
+  if (is.null(names(gpt_fits))){
     rownames(tab) <- paste("Model", 1:MM)
-  }else{
+  } else {
     rownames(tab) <- names(gpt_fits)
   }
   
@@ -62,14 +64,14 @@ select_gpt <- function (..., gpt_fits = list()){
 # }
 
 gpt.aic <- function(model){
-  aic <- with(model, -2*fit.grad$loglik + 
-                2*(length(model$gpt@eta)+length(model$gpt@theta)))
-  return(aic)
+  S <- length(model$gpt@eta)+length(model$gpt@theta)
+  aic <- -2 * model$fit.grad$loglik + 2*S
+  aic
 }
 
 
 gpt.bic <- function(model){
-  bic <- with(model, -2*fit.grad$loglik + 
-                (length(model$gpt@eta)+length(model$gpt@theta))*log(length(data$x)))
-  return(bic)
+  S <- length(model$gpt@eta)+length(model$gpt@theta)
+  bic <- -2 * model$fit.grad$loglik + S*log(length(model$data$x))
+  bic
 }

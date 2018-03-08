@@ -2,7 +2,7 @@ Package: gpt
 Type: Package
 Title: Generalized Processing Tree Models
 Version: 0.6.0
-Date: 2018-01-04
+Date: 2018-03-08
 Author: Daniel W. Heck
 Authors@R: person("Daniel", "Heck", email = "heck@uni-mannheim.de",
   role = c("aut", "cre"))

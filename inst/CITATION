@@ -1,0 +1,14 @@
+bibentry("Article",
+		title="Generalized processing tree models: Jointly modeling discrete and continuous variables",
+		author="Daniel W. Heck, Edgar Erdfelder, and Pascal J. Kieslich",
+		journal = "Psychometrika",
+		year="in press",
+	#	volume = "",
+	#	pages = "XX-XX",
+		url="https://github.com/danheck/gpt",
+	#	textVersion =
+		paste0("Heck, D. W., Erdfelder, E., & Kieslich, P. J. (in press). ",
+           "Generalized processing tree models: Jointly modeling discrete and continuous variables. ",
+           "Psychometrika."),
+		mheader = "To cite gpt in publications use:")
+

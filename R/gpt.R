@@ -1,7 +1,8 @@
 #' Generalized Processing Tree Models
 #'
 #' Fits GPT models for multivariate data (one discrete and one or more continuous responses per trial). 
-#' Assumes that distribution of continuous variable(s) is a mixture distribution with the MPT core structure defining the mixture probabilities.
+#' Assumes that distribution of continuous variable(s) is a mixture distribution 
+#' with the MPT core structure defining the mixture probabilities.
 #'
 #' The GPT structure is implemented by an S4 class \code{gpt}, which contains the MPT structure (the S4 class \code{mpt}), a vector mapping the MPT branches to the underlying continuous distributions (\code{mapvec}), a list of univariate or multivariate basis distributions (each an S4 class \code{contin} with information about parameter spaces etc.), the parameter labels for \code{theta} and \code{eta}, and a vector with constant values for the parameters.
 #' 
