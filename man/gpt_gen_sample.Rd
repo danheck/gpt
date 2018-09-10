@@ -4,8 +4,8 @@
 \alias{gpt_gen_sample}
 \title{Generate Sample of Data Sets}
 \usage{
-gpt_gen_sample(S, n, theta, eta, theta_sd = 0, eta_sd = 0, file, latent,
-  restrictions = NULL, cpu)
+gpt_gen_sample(S, n, theta, eta, theta_sd = 0, eta_sd = 0, file,
+  latent, restrictions = NULL, cpu)
 }
 \arguments{
 \item{S}{sample size (number of participants)}
