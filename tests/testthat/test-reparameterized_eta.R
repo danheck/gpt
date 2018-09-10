@@ -2,7 +2,6 @@
 #### Reparameterized eta Parameters
 #########################
 
-library(gpt)
 htm <- "
 # tree ; cat  ; equation      ;  normal
 old    ; hit  ; do            ;  m_d,sig    
@@ -32,6 +31,8 @@ eta.r <- c(m_d=5, add=5, sig=1/5)
 context("Model definition")
 
 test_that("eta parameters are correctly reparameterized", {
+  
+  set.seed(123)
   
   expect_silent(hr <- read_gpt(htm.r, "normal"))
   expect_identical(hr@eta, c("add", "m_d", "sig"))

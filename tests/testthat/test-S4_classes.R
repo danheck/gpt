@@ -1,7 +1,8 @@
-library("testthat")
 context("S4 class structure of univariate distributions")
 
 test_that("'contin' S4 class and methods", {
+  
+  set.seed(123)
   
   labels <-  c("normal", "lognormal", "beta", "weibull",
                "gamma", "exgauss", "wald","exwald")

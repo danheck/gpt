@@ -3,6 +3,8 @@ context("Data generation and fitting for GPT models")
 
 test_that("gpt_gen generates valid GPT data", {
   
+  set.seed(123)
+  
   ############# 1D exGaussian 
   n <- c(targets=300, lures=300)
   theta <- c(do=.7,dn=.5, g=.4)
@@ -46,6 +48,7 @@ test_that("gpt_gen generates valid GPT data", {
 
 test_that("gpt_fit recovers true exGaussian parameters in 2HTM", {
   
+  set.seed(123)
   
   n <- c(targets=130, lures=130)
   theta <- c(do=.7,dn=.5, g=.4)
