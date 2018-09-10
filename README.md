@@ -18,7 +18,9 @@ The package is not yet available on CRAN. To get the latest developer version
 from GitHub, `gpt` can be installed via:
 
 ```
-install.packages("devtools")
+# install.packages("numDeriv", "methods", "matrixStats", "statmod")
+# install.packages("devtools")
+
 devtools::install_github("danheck/gpt")
 ```
 
