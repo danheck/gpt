@@ -41,7 +41,7 @@ plot.gpt_fit <- function(x, y, ks.test = FALSE, dim = 1, #group = 1,
     y.obs <- data$y[data$x == j,dim]
     e <- ecdf(y.obs)
     pp <- cdf(model$gpt, rep(j, length(y)), matrix(y, ncol = 1),
-              model$fit.grad$par[1:S1], model$fit.grad$par[-(1:S1)], log.p = FALSE)
+              model$fit.grad$par[1:S1], model$fit.grad$par[S1 + (1:S2)], log.p = FALSE)
     tit <- paste0("category: ", cat.names[j])
     # tit <- ifelse(is.null(group),tit, paste0(tit, " (group=",group,")"))
     plot(y, sapply(y, function(yy) e(yy)*relfreq[j]), type = "l", 

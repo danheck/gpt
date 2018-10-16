@@ -51,7 +51,7 @@ test_fit <- function (gpt_fit, breaks, bins = 6, statistic = "dn", lambda = 1){
     catprob <- mpt.cat.prob(gpt_fit$gpt@mpt, theta = par[1:S1])
     conditional_cdf <- function(y, j) 
       cdf(gpt_fit$gpt, x = rep(j, length(y)), y = matrix(y), theta = par[1:S1], 
-                eta = par[-c(1:S1)], const = gpt_fit$gpt@const, log.p = FALSE) / catprob[j]
+                eta = par[S1 + (1:S2)], const = gpt_fit$gpt@const, log.p = FALSE) / catprob[j]
     
     diff_p <- function(q, j, cumprob) conditional_cdf(q, j) - cumprob
     
@@ -104,7 +104,7 @@ prob.bins <- function(par, gpt, b.list){
   prob <- matrix(NA, J, B, dimnames = list(gpt@mpt@cat.names, paste0("bin", 1:B)))
   for (j in 1:J){
     prob[j,1:(B-1)] <- cdf(gpt, x = rep(j, B - 1), y = matrix(b.list[[j]]),
-                           theta = par[1:S1], eta = par[-(1:S1)], log.p = FALSE)
+                           theta = par[1:S1], eta = par[S1 + (1:S2)], log.p = FALSE)
   }
   prob[,B] <- mpt.cat.prob(gpt@mpt, par[1:S1])
   prob[,2:B] <- prob[,2:B]  - prob[,1:(B - 1)]
@@ -118,7 +118,7 @@ prob.bins <- function(par, gpt, b.list){
 #   prob.list[[d]] <- matrix(NA, J, B, dimnames = list(gpt@mpt@cat.names, NULL))
 #   for (cc in 1:J){
 #     prob.list[[d]][cc,] <- cdf(gpt, x = rep(cc, B[d]), y = matrix(b.list.interior[[d]], ncol = 1),
-#                                theta = par[1:S1], eta = par[-(1:S1)], log.p = FALSE)
+#                                theta = par[1:S1], eta = par[S1 + (1:S2)], log.p = FALSE)
 #   }
 # }
 

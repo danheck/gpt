@@ -37,12 +37,12 @@ setMethod("cdf", signature(distr = "gpt",
                            log.p = "logical"),
           function(distr, x, y, theta, eta, log.p=FALSE){
             N <- length(x)
+            # browser()
             eta.repar <- eta.reparameterize(eta, distr)
             
             # MPT structure:
             branch.prob <- mpt.branch.prob(mpt=distr@mpt, theta=theta)
             lik.branch <- t(branch.prob *  t(distr@mpt@reduce))[x,,drop=FALSE]
-            # browser()
             # states:
             # only for relevant rows (improved)
             if (ncol(y) > 1){
