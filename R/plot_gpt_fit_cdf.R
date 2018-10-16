@@ -21,6 +21,7 @@ plot.gpt_fit <- function(x, y, ks.test = FALSE, dim = 1, #group = 1,
   cat.names <- model$gpt@mpt@cat.names
   J <- length(cat.names)
   S1 <- length(model$gpt@theta)
+  S2 <- length(model$gpt@eta)
   cat.prob <- mpt.cat.prob(model$gpt@mpt, model$fit.grad$par[1:S1])
   
   miny <- min(data$y[,dim])# +.1
@@ -41,7 +42,7 @@ plot.gpt_fit <- function(x, y, ks.test = FALSE, dim = 1, #group = 1,
     y.obs <- data$y[data$x == j,dim]
     e <- ecdf(y.obs)
     pp <- cdf(model$gpt, rep(j, length(y)), matrix(y, ncol = 1),
-              model$fit.grad$par[1:S1], model$fit.grad$par[-(1:S1)], log.p = FALSE)
+              model$fit.grad$par[1:S1], model$fit.grad$par[S1 + (1:S2)], log.p = FALSE)
     tit <- paste0("category: ", cat.names[j])
     # tit <- ifelse(is.null(group),tit, paste0(tit, " (group=",group,")"))
     plot(y, sapply(y, function(yy) e(yy)*relfreq[j]), type = "l", 
