@@ -62,7 +62,7 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
         if (ncol(y) > 1){
           for (s in 1:S){
             # only compute density for states with nonzero probability:
-            select.rows <- rowSums(E.prob[x,][,gpt@map == s,drop=FALSE]) != 0
+            select.rows <- rowSums(E.prob[x,,drop = FALSE][,gpt@map == s,drop=FALSE]) != 0
             lik.base[select.rows,s]  <-  dmultivar(y = y[select.rows,,drop=FALSE], 
                                                    distr=gpt@distr[[s]], 
                                                    eta = eta.repar, 
@@ -77,12 +77,12 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
         lik.branch <- lik.base[,gpt@map]
         
         # unobserved, complete data: state indicators (each row sums up to one)
-        Z.tmp <- E.prob[x,]  * lik.branch
+        Z.tmp <- E.prob[x,,drop = FALSE]  * lik.branch
         
         # conditional probability by normalization
-        Z <-  Z.tmp /(rowSums(Z.tmp)) #E.prob[dat$x,] * E.rt.cond
+        Z <-  Z.tmp /(rowSums(Z.tmp)) #E.prob[dat$x,,drop = FALSE] * E.rt.cond
       }else{
-        Z <- E.prob[x,]
+        Z <- E.prob[x,,drop = FALSE]
       }
       
       ##########  M- step: maximize parameters (separately) ###############
