@@ -100,6 +100,7 @@ test_fit <- function (gpt_fit, breaks, bins = 6, statistic = "dn", lambda = 1){
 prob.bins <- function(par, gpt, b.list){
   J <- length(gpt@mpt@cat.names)  # number of categories
   S1 <- length(gpt@theta)         # number of theta parameters
+  S2 <- length(gpt@eta)         # number of theta parameters
   B <- length(b.list[[1]]) + 1    # number of bins
   
   prob <- matrix(NA, J, B, dimnames = list(gpt@mpt@cat.names, paste0("bin", 1:B)))
