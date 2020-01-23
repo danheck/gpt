@@ -4,8 +4,16 @@
 \alias{predict.gpt_fit}
 \title{Predictions  for GPT Models}
 \usage{
-\method{predict}{gpt_fit}(object, cat = TRUE, dens = FALSE, group,
-  dim = 1, quantiles = c(0.1, 0.3, 0.5, 0.7, 0.9), prec = 500, ...)
+\method{predict}{gpt_fit}(
+  object,
+  cat = TRUE,
+  dens = FALSE,
+  group,
+  dim = 1,
+  quantiles = c(0.1, 0.3, 0.5, 0.7, 0.9),
+  prec = 500,
+  ...
+)
 }
 \arguments{
 \item{object}{GPT model fitted by \code{\link{gpt_fit}}}

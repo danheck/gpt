@@ -4,10 +4,24 @@
 \alias{gpt_fit}
 \title{Fit GPT Model}
 \usage{
-gpt_fit(x, y, data, file, latent, group = NULL, restrictions = NULL,
-  baseline = FALSE, starting.values = NULL, eta.lower = NULL,
-  eta.upper = NULL, n.fit = c(3, 1), maxit = c(300, 1000),
-  EM.tol = 0.01, cpu = NULL, print = FALSE)
+gpt_fit(
+  x,
+  y,
+  data,
+  file,
+  latent,
+  group = NULL,
+  restrictions = NULL,
+  baseline = FALSE,
+  starting.values = NULL,
+  eta.lower = NULL,
+  eta.upper = NULL,
+  n.fit = c(3, 1),
+  maxit = c(300, 1000),
+  EM.tol = 0.01,
+  cpu = NULL,
+  print = FALSE
+)
 }
 \arguments{
 \item{x}{vector of observed discrete observations (e.g., choices) or name of variable in \code{data}}

@@ -4,8 +4,14 @@
 \alias{pqplot}
 \title{Plot Predicted vs. Observed Quantiles}
 \usage{
-pqplot(gpt_fit, cumsum = FALSE, quantiles = seq(0.1, 0.9, 0.2),
-  ncol = 4, dim = 1, group)
+pqplot(
+  gpt_fit,
+  cumsum = FALSE,
+  quantiles = seq(0.1, 0.9, 0.2),
+  ncol = 4,
+  dim = 1,
+  group
+)
 }
 \arguments{
 \item{gpt_fit}{a fitted GPT model (see \code{\link{gpt_fit}})}

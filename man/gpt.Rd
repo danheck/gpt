@@ -3,7 +3,6 @@
 \docType{package}
 \name{gpt}
 \alias{gpt}
-\alias{gpt-package}
 \title{Generalized Processing Tree Models}
 \description{
 Fits GPT models for multivariate data (one discrete and one or more continuous responses per trial). 
