@@ -3,3 +3,4 @@
 .RDataTmp
 man-roxygen/*
 README.md
+.travis.yml

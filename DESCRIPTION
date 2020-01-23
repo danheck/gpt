@@ -4,9 +4,10 @@ Title: Generalized Processing Tree Models
 Version: 0.6.0
 Date: 2018-03-08
 Author: Daniel W. Heck
-Authors@R: person("Daniel", "Heck", email = "heck@uni-mannheim.de",
-  role = c("aut", "cre"))
-Maintainer: Daniel W. Heck <heck@uni-mannheim.de>
+Authors@R: person("Daniel W.", "Heck", 
+                    email = "dheck@uni-marburg.de", role = c("aut","cre"), 
+                    comment = c(ORCID = "0000-0002-6302-9252"))
+Maintainer: Daniel W. Heck <dheck@uni-marburg.de>
 Imports:
     parallel,
     numDeriv,
