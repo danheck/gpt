@@ -24,8 +24,7 @@ setClass("contin",
            
            ee <- length(object@eta.idx)
            
-           if(!identical(ee,length(object@lower),
-                         length(object@upper)))
+           if(ee != length(object@lower) || ee != length(object@upper))
              return("Lengths of eta.idx, lower and upper bounds do not match!")
            
            if(any(is.na(object@lower), is.na(object@upper)))
@@ -112,17 +111,18 @@ make.distr <- function(label, eta.idx, y=NULL){
 }
 
 
-setMethod(
-  f="identical",
-  signature="distr.uni",
-  definition = function(x, y){
-    ident <- 
-      x@label == y@label &&
-      x@dens == y@dens &&
-      x@eta.idx == y@eta.idx &&
-      x@range == y@range &&
-      x@lower == y@lower &&
-      x@upper == y@upper
-    return(ident)
-  }
-)
+
+# setMethod(
+#   f="identical",
+#   signature="distr.uni",
+#   definition = function(x, y){
+#     ident <- 
+#       x@label == y@label &&
+#       x@dens == y@dens &&
+#       x@eta.idx == y@eta.idx &&
+#       x@range == y@range &&
+#       x@lower == y@lower &&
+#       x@upper == y@upper
+#     return(ident)
+#   }
+# )

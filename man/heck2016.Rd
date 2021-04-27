@@ -4,11 +4,13 @@
 \name{heck2016}
 \alias{heck2016}
 \title{Recognition Memory Data of a Single Participant}
-\format{A data frame with 1,200 rows and 2 variables:
+\format{
+A data frame with 1,200 rows and 2 variables:
 \describe{
   \item{cat}{type of response}
   \item{rt}{response time}
-}}
+}
+}
 \usage{
 heck2016
 }

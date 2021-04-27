@@ -12,6 +12,7 @@ setGeneric("rand", function(distr, n, eta=NULL, theta=NULL, const=NULL) {
 setMethod("rand", signature(distr = "contin", 
                             n = "numeric", 
                             eta = "numeric",
+                            theta = "missing",
                             const = "numeric"), 
           function(distr, n, eta, const){
             names(eta) <- names(const) <- NULL
@@ -34,7 +35,9 @@ setMethod("rand", signature(distr = "contin",
 # (returns matrix with responses x and latent states z)
 setMethod("rand", signature(distr = "mpt",
                             n = "numeric",
-                            theta = "numeric"),
+                            eta = "missing",
+                            theta = "numeric",
+                            const = "missing"),
           function(distr, n, theta){
             mpt <- distr
             
@@ -87,7 +90,8 @@ setMethod("rand", signature(distr = "mpt",
 setMethod("rand", signature(distr = "gpt",
                             n = "numeric",
                             eta = "numeric",
-                            theta = "numeric"),
+                            theta = "numeric",
+                            const = "missing"),
           function(distr, n, eta, theta){
             gpt <- distr
             

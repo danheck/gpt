@@ -7,10 +7,12 @@ setGeneric("dens",
 
 # univariate densities (for latent components):
 setMethod("dens", signature(distr = "contin", 
-                            y="numeric", 
-                            eta="numeric",
+                            x = "missing",
+                            y = "numeric", 
+                            theta = "missing",
+                            eta = "numeric",
                             const = "numeric",
-                            log="logical"), 
+                            log = "logical"), 
           function(distr, y, eta, const, log=FALSE) {
             names(eta) <- names(const) <- NULL
             ee <- distr@eta.idx
@@ -33,7 +35,10 @@ setMethod("dens", signature(distr = "contin",
 # (returns matrix with responses x and latent states z)
 setMethod("dens", signature(distr = "mpt",
                             x = "numeric",
+                            y = "missing",
                             theta = "numeric",
+                            eta = "missing",
+                            const = "missing",
                             log="logical"),
           function(distr, x, theta, log=FALSE){
             
@@ -62,6 +67,7 @@ setMethod("dens", signature(distr = "gpt",
                             y = "matrix",
                             theta = "numeric",
                             eta = "numeric",
+                            const = "missing",
                             log = "logical"),
           function(distr, x, y, theta, eta, log=FALSE){
             

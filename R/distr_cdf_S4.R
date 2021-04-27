@@ -9,7 +9,9 @@ setGeneric("cdf",
 
 # univariate latent CDF:
 setMethod("cdf", signature(distr = "contin", 
+                           x="missing",
                            y="numeric", 
+                           theta="missing",
                            eta="numeric",
                            const = "numeric",
                            log.p = "logical"), 
@@ -34,6 +36,7 @@ setMethod("cdf", signature(distr = "gpt",
                            y = "matrix",
                            theta = "numeric",
                            eta = "numeric",
+                           const="missing",
                            log.p = "logical"),
           function(distr, x, y, theta, eta, log.p=FALSE){
             N <- length(x)

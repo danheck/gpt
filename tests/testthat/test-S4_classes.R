@@ -69,7 +69,7 @@ test_that("'contin' S4 class and methods", {
 # test
 # 
 # 
-# 
+
 # ############ MPTMIX class
 # 
 # new("gpt", file)

@@ -3,7 +3,6 @@
 #' The continuous variable of a GPT model is categorized into discrete bins to compute Pearsons
 #' X^2 between the predicted and observed bin frequencies.
 #' 
-#' @inheritParams print.gpt_fit
 #' @param gpt_fit a fitted GPT model (see \code{\link{gpt_fit}})
 #' @param breaks a list giving the breakpoints per category or a vector, in 
 #'     which case the same bounds are used for each category. By default,

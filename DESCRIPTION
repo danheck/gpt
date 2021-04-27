@@ -26,4 +26,5 @@ Description: Fits generalized processing tree models (GPT; Heck, Erdfelder, & Ki
     and gradient-based optimization, model tests, summaries, and plots.
 License: GPL (>= 2)
 LazyData: true
-RoxygenNote: 7.0.2
+Encoding: UTF-8
+RoxygenNote: 7.1.1

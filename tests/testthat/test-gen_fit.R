@@ -17,8 +17,8 @@ test_that("gpt_gen generates valid GPT data", {
   
   expect_s3_class(gen, "data.frame")
   expect_identical(names(gen), c("tree","x","y","state"))
-  expect_s3_class(gen$tree, "factor")
-  expect_s3_class(gen$x, "factor")
+  expect_type(gen$tree, "character")
+  expect_type(gen$x, "character")
   expect_type(gen$y, "double")
   expect_type(gen$state, "integer")
   
@@ -35,8 +35,8 @@ test_that("gpt_gen generates valid GPT data", {
   
   expect_s3_class(gen, "data.frame")
   expect_identical(names(gen), c("tree","x","y.1","y.2","state"))
-  expect_s3_class(gen$tree, "factor")
-  expect_s3_class(gen$x, "factor")
+  expect_type(gen$tree, "character")
+  expect_type(gen$x, "character")
   expect_type(gen$y.1, "double")
   expect_type(gen$state, "integer")
   
