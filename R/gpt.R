@@ -13,7 +13,13 @@
 #' Note that restrictions on the parameter space are automatically taken into account 
 #' (e.g., variances must be positive). 
 #' 
-#' @author Daniel W. Heck, \email{heck@@uni-mannheim.de}
+#' @references 
+#' Heck, D. W., Erdfelder, E., & Kieslich, P. J. (2018). 
+#' Generalized processing tree models: Jointly modeling discrete and continuous variables. 
+#' Psychometrika, 83, 893–918. https://doi.org/10.1007/s11336-018-9622-0
+#' 
+#' @author Daniel W. Heck, \email{dheck@@uni-marburg.de}
+#' 
 # @import statmod, gamlss.dist, numDeriv
 #' @import stats
 #' @importFrom graphics legend curve
