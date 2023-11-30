@@ -1,3 +1,10 @@
+gpt 0.6.1 (November 2023)
+===========
+
+* fix test_fit() issue due to incompatible S3 class cdf("gpt")
+* updated citation("gpt") to pubished Psychometrika paper (Heck et al., 2018)
+
+
 gpt 0.6.0 (January 2018)
 ===========
 

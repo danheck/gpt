@@ -1,13 +1,13 @@
 Package: gpt
 Type: Package
 Title: Generalized Processing Tree Models
-Version: 0.6.0
-Date: 2018-03-08
+Version: 0.6.1
+Date: 2023-11-30
 Author: Daniel W. Heck
 Authors@R: person("Daniel W.", "Heck", 
-                    email = "dheck@uni-marburg.de", role = c("aut","cre"), 
+                    email = "daniel.heck@uni-marburg.de", role = c("aut","cre"), 
                     comment = c(ORCID = "0000-0002-6302-9252"))
-Maintainer: Daniel W. Heck <dheck@uni-marburg.de>
+Maintainer: Daniel W. Heck <daniel.heck@uni-marburg.de>
 Imports:
     parallel,
     numDeriv,
@@ -27,4 +27,4 @@ Description: Fits generalized processing tree models (GPT; Heck, Erdfelder, & Ki
 License: GPL (>= 2)
 LazyData: true
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
