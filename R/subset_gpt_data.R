@@ -14,7 +14,7 @@ select.data <- function(data, group){
 }
 
 
-subset.gpt_fit <- function(x, group){
+gpt_fit_grouped <- function(x, group){
   if (missing(group) && !is.null(x$data$group)){
     stop("Group index must be specified to get predictions.")
   } else if (!is.null(x$data$group)){

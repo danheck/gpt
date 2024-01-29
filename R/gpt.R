@@ -25,7 +25,7 @@
 #' @importFrom graphics legend curve
 #' @importFrom grDevices adjustcolor
 #' 
-#' @docType package
 #' @name gpt
-NULL
+"_PACKAGE"
+
 

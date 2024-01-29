@@ -2,6 +2,7 @@
 % Please edit documentation in R/gpt.R
 \docType{package}
 \name{gpt}
+\alias{gpt-package}
 \alias{gpt}
 \title{Generalized Processing Tree Models}
 \description{

@@ -45,7 +45,7 @@
 predict.gpt_fit <- function(object, cat = TRUE, dens = FALSE, group, dim = 1, 
                             quantiles = c(.1,.3,.5,.7,.9), prec=500, ...){
   
-  object <- subset.gpt_fit(object, group = group)
+  object <- gpt_fit_grouped(object, group = group)
   yy <- matrix(colMeans(object$data$y), prec, ncol(object$data$y), byrow = TRUE)
   yy[,dim] <- seq(min(object$data$y[,dim]), 
                   max(object$data$y[,dim]), length.out =  prec)

@@ -17,7 +17,7 @@ pqplot <- function(gpt_fit, cumsum = FALSE, quantiles = seq(.1,.9,.2),
   mar <- par()$mar
   
   cat.names <- gpt_fit$gpt@mpt@cat.names
-  gpt_fit <- subset.gpt_fit(gpt_fit, group)
+  gpt_fit <- gpt_fit_grouped(gpt_fit, group)
   x <- gpt_fit$data$x
   y <- gpt_fit$data$y[,dim]
   N <- length(x)
