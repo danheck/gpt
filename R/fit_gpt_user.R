@@ -20,7 +20,7 @@
 #' @param print whether to print current status
 #' 
 #' @details The following paramaters are used to specify the latent distributions (will be assigned in this order to the parameters listed in the model file as last argument in each row/branch):
-#' \itemize{
+#' \describe{
 #' \item{\code{"normal"}:}{mean (mu) and SD (sigma)}
 #' \item{\code{"exgauss"} (sum of normal and independent exponential):}{mean and SD of normal (mu, sigma); mean of exponential (tau)}
 #' \item{\code{"gamma"}:}{ shape (k), scale (theta), shift}
