@@ -58,7 +58,7 @@ test_that("eta parameters are correctly reparameterized", {
                  restrictions = list("do=dn"), file=htm)
   expect_warning(fit2 <- gpt_fit(x="x", y="y", data=gen, latent=c("normal"), 
                                  # eta.lower =c("add" = 0, "sig" = 0),
-                                 eta.upper = c(1), 
+                                 # eta.upper = c(1),   # --> decrease in fit!
                                  n.fit = c(3,1), maxit = c(1000,1000), 
                                  starting.values = c(eta.r, theta),
                                  restrictions = list("do=dn"), file=htm.r))

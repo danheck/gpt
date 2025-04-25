@@ -23,14 +23,19 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
   for (EM.cnt in 1:n.fit){
     if (print) cat( EM.cnt, "..")
     
+    par.guess <- guess.start(distr = gpt, y = y)[c(gpt@theta, gpt@eta)]
     if (EM.cnt == 1 && !is.null(starting.values) && length(starting.values) > 0){
-      if (P1>0 && any(starting.values[1:P1]<0 | starting.values[1:P1]>1))
+      # use some of the provided starting values
+      starting.values <- c(starting.values[names(starting.values) %in% names(par.guess)], 
+                           par.guess[!names(par.guess) %in% names(starting.values)])
+      # check:
+      if (P1 > 0 && any(starting.values[1:P1] < 0 | starting.values[1:P1] > 1))
         stop("Check starting values: First", P1, 
              " values must be MPT probabilites in [0,1]!")
       par <- starting.values # user-provided starting values
     } else {
-      # guess starting values
-      par <- starting.values <- guess.start(distr = gpt, y = y)[c(gpt@theta, gpt@eta)]
+      # guess all starting values
+      par <- starting.values <- par.guess
     }
     
     ###################################################### 
