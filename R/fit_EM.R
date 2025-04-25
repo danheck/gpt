@@ -10,8 +10,8 @@ fit.EM <- function(gpt, x, y, starting.values=NULL,
   P2 <- length(gpt@eta)
   # eta.lower <- get.eta.lower(gpt)
   # eta.upper <- get.eta.upper(gpt)
-  eta.lower <- get.eta.bound(gpt, lower = TRUE,  user.defined = eta.lower, warning = TRUE)
-  eta.upper <- get.eta.bound(gpt, lower = FALSE, user.defined = eta.upper)
+  # eta.lower <- get.eta.bound(gpt, lower = TRUE,  user.defined = eta.lower, warning = TRUE)
+  # eta.upper <- get.eta.bound(gpt, lower = FALSE, user.defined = eta.upper)
   
   starting.values <- check.input.par(par = starting.values, names = c(gpt@theta, gpt@eta))
   

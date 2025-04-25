@@ -8,8 +8,8 @@ fit.grad <- function(gpt, x, y,
   P2 <- length(gpt@eta)
   # eta.lower <- get.eta.lower(gpt)
   # eta.upper <- get.eta.upper(gpt)
-  eta.lower <- get.eta.bound(gpt, lower = TRUE, user.defined = eta.lower)
-  eta.upper <- get.eta.bound(gpt, lower = FALSE, user.defined = eta.upper)
+  # eta.lower <- get.eta.bound(gpt, lower = TRUE, user.defined = eta.lower)
+  # eta.upper <- get.eta.bound(gpt, lower = FALSE, user.defined = eta.upper)
   
   # best fitting parameters:
   loglik <- rep(NA, n.fit)  

@@ -49,17 +49,17 @@ test_that("eta parameters are correctly reparameterized", {
                  restrictions = list("do=dn"), file= htm)
   gen2 <- gpt_gen(n=n, theta=theta, eta=eta.r, latent=c("normal"),  
                   restrictions = list("do=dn"), file= htm.r)
-  expect_true(ks.test(gen$y, gen2$y)$p> .001)
+  expect_true(ks.test(gen$y, gen2$y)$p > .001)
   
   #### GPT
   fit <- gpt_fit(x="x", y="y", data=gen, latent=c("normal"), 
-                 n.fit = c(2,1), maxit = c(1000,1000), 
+                 n.fit = c(3,1), maxit = c(1000,1000), 
                  starting.values = c(eta, theta),
                  restrictions = list("do=dn"), file=htm)
   expect_warning(fit2 <- gpt_fit(x="x", y="y", data=gen, latent=c("normal"), 
-                                 eta.lower =c("add" = 0, "sig" = 0),
-                                 # eta.upper = c("m_d" = 1000), 
-                                 n.fit = c(2,1), maxit = c(1000,1000), 
+                                 # eta.lower =c("add" = 0, "sig" = 0),
+                                 eta.upper = c(1), 
+                                 n.fit = c(3,1), maxit = c(1000,1000), 
                                  starting.values = c(eta.r, theta),
                                  restrictions = list("do=dn"), file=htm.r))
   
@@ -69,3 +69,4 @@ test_that("eta parameters are correctly reparameterized", {
   expect_equal(fit$fit.grad$par[5], 5*fit2$fit.grad$par[5], tolerance = .01)
   
 })
+

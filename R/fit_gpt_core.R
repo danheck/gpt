@@ -4,9 +4,11 @@
 # x: vector of category numbers (!)
 gpt_fit.core <- function(x, y, gpt, 
                          baseline = FALSE, starting.values=NULL, 
-                         eta.lower=0.01,   eta.upper=Inf,
+                         eta.lower=0.01, eta.upper=Inf,
                          n.fit=c(6,2), maxit=c(500, 1000), EM.tol=.001, print = FALSE){
   
+  eta.lower <- get.eta.bound(gpt, lower = TRUE,  user.defined = eta.lower, warning = TRUE)
+  eta.upper <- get.eta.bound(gpt, lower = FALSE, user.defined = eta.upper)
   
   fit.EM <- fit.EM(gpt, x, y, 
                    starting.values=starting.values, eta.lower=eta.lower, eta.upper=eta.upper,
